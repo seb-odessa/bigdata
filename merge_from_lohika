@@ -1,0 +1,12 @@
+#!/bin/bash
+
+REMOTE_REP=remote
+REMOTE_URL=git@git.lohika.com:pkolevatyh/bigdata.git
+
+git add .
+git commit -m "Commit all changes before merge"
+git remote add ${REMOTE_REP} ${REMOTE_URL}
+git fetch ${REMOTE_REP}
+git merge ${REMOTE_REP}/master
+git remote rm ${REMOTE_REP}
+git push
