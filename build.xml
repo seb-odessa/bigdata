@@ -1,28 +1,26 @@
-<project name="HelloWorld" basedir="." default="main">
-    <property name="src.dir"     value="src/HelloWorld"/>
-    <property name="build.dir"   value="build"/>
-    <property name="classes.dir" value="${build.dir}/classes"/>
-    <property name="jar.dir"     value="${build.dir}/jar"/>
+<project name="BigData" basedir="." default="main">
+    <property name="proj"    value="HelloWorld" />
+    <property name="src"     value="src/${proj}" />
+    <property name="build"   value="build" />
+    <property name="classes" value="${build}/classes" />
+    <property name="jar"     value="${build}/jar" />
 
     <target name="clean">
-        <delete dir="build"/>
+        <delete dir="${build}" />
     </target>
     <target name="build">
-        <mkdir dir="build/classes"/>
-        <javac srcdir="src" destdir="build/classes"  includeantruntime="false"/>
+        <mkdir dir="${classes}" />
+        <javac srcdir="src" destdir="${classes}"  includeantruntime="false"/>
     </target>
 
-    <target name="jar">
-        <mkdir dir="build/jar"/>
-        <jar destfile="build/jar/HelloWorld.jar" basedir="build/classes">
+    <target name="HelloWorld" depends="build">
+        <mkdir dir="${jar}"/>
+        <jar destfile="${jar}/${proj}.jar" basedir="${classes}">
             <manifest>
-                <attribute name="Main-Class" value="HelloWorld"/>
+                <attribute name="Main-Class" value="${proj}"/>
             </manifest>
         </jar>
-    </target>
-
-    <target name="run">
-        <java jar="build/jar/HelloWorld.jar" fork="true"/>
+        <java jar="build/jar/${proj}.jar" fork="true"/>
     </target>
 
 </project>
