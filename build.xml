@@ -1,5 +1,4 @@
 <project name="BigData" basedir="." default="main">
-    <property name="proj"    value="HelloWorld" />
     <property name="src"     value="src/${proj}" />
     <property name="build"   value="build" />
     <property name="classes" value="${build}/classes" />
@@ -14,6 +13,18 @@
     </target>
 
     <target name="HelloWorld" depends="build">
+        <property name="proj"    value="HelloWorld" />
+        <mkdir dir="${jar}"/>
+        <jar destfile="${jar}/${proj}.jar" basedir="${classes}">
+            <manifest>
+                <attribute name="Main-Class" value="${proj}"/>
+            </manifest>
+        </jar>
+        <java jar="build/jar/${proj}.jar" fork="true"/>
+    </target>
+
+    <target name="CopyFiles" depends="build">
+        <property name="proj"    value="CopyFiles" />
         <mkdir dir="${jar}"/>
         <jar destfile="${jar}/${proj}.jar" basedir="${classes}">
             <manifest>
