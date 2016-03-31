@@ -1,6 +1,7 @@
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import Streams.CopyStreams;
 
 public class CopyFiles {
     public static void main(String[] args) throws IOException {
