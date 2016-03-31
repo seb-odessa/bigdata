@@ -1,0 +1,12 @@
+#!/bin/bash
+
+SOURCE_REP=github
+GITHUB_URL=git@github.com:seb-odessa/bigdata.git
+
+git add .
+git commit -m "Commit all changes before merge"
+git remote add ${SOURCE_REP} ${GITHUB_URL}
+git fetch ${SOURCE_REP}
+git merge ${SOURCE_REP}/master
+git remote rm ${SOURCE_REP}
+git push
