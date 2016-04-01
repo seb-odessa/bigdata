@@ -1,7 +1,7 @@
 # Big Data
-This project was created for home works
+This project for home works
 
-#hsfs 
+#hdfs 
 Contains tool for 
 - uploading local files to the (remote) HDFS. 
 - dounloading frm the HDFS to the local filesystem
