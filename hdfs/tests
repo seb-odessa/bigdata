@@ -1,0 +1,5 @@
+
+hadoop jar jar/hdfs.jar cp build.xml build.bak
+cmp --silent build.xml build.bak && echo Ok || echo Failure
+
+

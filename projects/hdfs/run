@@ -1,2 +1,0 @@
-
-hadoop jar ../../jars/hdfs.jar cp build.xml build.bak

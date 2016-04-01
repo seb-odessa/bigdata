@@ -13,7 +13,7 @@ public class hdfs {
 	  }
     switch (args[0]) {
       case "cp" :
-        streams.cp(streams.istream(args[1]), streams.ostream(args[2]));
+        streams.cp(args[1], args[2]);
     }
 
   }

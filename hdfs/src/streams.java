@@ -1,5 +1,6 @@
 package tools;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -22,33 +23,38 @@ public class streams {
       throw new IllegalArgumentException("argument is null.");
     }
   }
-
-  public static InputStream istream(String filename)
-    throws IllegalArgumentException, IOException {
-    AssertNotNull(filename);
-    return new FileInputStream(filename);
+  
+  private static boolean isLocal(String filename) {
+    File local = new File(filename);
+    return (local.exists() && ! local.isDirectory());
   }
 
-  public static OutputStream ostream(String filename)
+  private static InputStream istream(String filename, FileSystem fs)
+    throws IllegalArgumentException, IOException {
+	if (isLocal(filename)) {
+	    return new FileInputStream(filename);
+	}
+	Path hdfs = new Path(filename);
+        return fs.open(hdfs);
+  }
+
+  private static OutputStream ostream(String filename)
     throws IllegalArgumentException, IOException {
     AssertNotNull(filename);
     return new FileOutputStream(filename);
   }
 
-  public static void cp(InputStream istream, OutputStream ostream)
+  public static void cp(String src_uri, String dst_uri)
     throws IllegalArgumentException, IOException {
-    AssertNotNull(istream);
-    AssertNotNull(ostream);
+        AssertNotNull(src_uri);
+	AssertNotNull(dst_uri);
+    	Configuration conf = new Configuration();
+	FileSystem fs = FileSystem.get(conf);
+	InputStream istream = istream(src_uri, fs);
+	AssertNotNull(istream);
+	OutputStream ostream = ostream(dst_uri);
+	AssertNotNull(ostream);
 
-    Configuration conf = new Configuration();
-//    IOUtils.copyBytes(istream, ostream, conf, true);
-    
-     int c;
-     while ((c = istream.read()) != -1) {
-       ostream.write(c);
-     }
-
-    istream.close();
-    ostream.close();
-  }
+	IOUtils.copyBytes(istream, ostream, conf, true);
+    }
 }
