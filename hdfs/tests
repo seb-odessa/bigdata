@@ -1,5 +1,18 @@
+#!/bin/bash
 
-hadoop jar jar/hdfs.jar cp build.xml build.bak
-cmp --silent build.xml build.bak && echo Ok || echo Failure
+TARGET=build.xml
+TEMPOR=/tmp/${TARGET}
 
-
+for REMOTE in \
+    ${TARGET} \
+    /users/coudera/${TARGET} \
+    hdfs://quickstart.cloudera:8020/users/coudera/${TARGET} \
+    ; 
+do
+echo hadoop jar jar/hdfs.jar put ${TARGET} ${REMOTE}
+hadoop jar jar/hdfs.jar put ${TARGET} ${REMOTE} || exit
+hadoop fs -get ${REMOTE} ${TEMPOR}
+hadoop fs -rm  ${REMOTE}
+cmp --silent ${TARGET} ${TEMPOR} && echo Ok || echo Failure
+rm ${TEMPOR}
+done
