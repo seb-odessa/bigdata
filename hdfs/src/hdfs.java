@@ -3,7 +3,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.IllegalArgumentException;
 
-import tools.streams;
+import hdfs.command;
 
 public class hdfs {
 
@@ -26,14 +26,15 @@ public class hdfs {
 	    usage();
 	    return;
 	}
-	
-	switch (args[0]) {
-    	    case "put" :
-    		streams.put(args[1], args[2]);
-    		break;
-	    default:
-		usage();
-		break;
+	if (args.length == 3) {
+		switch (args[0]) {
+    	        case "put" :
+    		    command.put(args[1], args[2]);
+    		    break;
+		default:
+		    usage();
+		    break;
+	    }
 	}
     }
 }

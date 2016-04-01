@@ -23,7 +23,7 @@
         <delete dir="${classes}" />
     </target>
 
-    <target name="build">
+    <target name="build" depends="clean">
         <mkdir dir="${classes}" />
         <javac srcdir="src" destdir="${classes}"  includeantruntime="false" >
           <classpath refid="classpath" />
