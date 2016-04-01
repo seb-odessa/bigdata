@@ -12,19 +12,12 @@
       <fileset dir="${classes}">
         <include name="/*.class" />
       </fileset>
-      <fileset dir="/usr/lib/hadoop">
-        <include name="**/*.jar" />
-      </fileset>
-      <fileset dir="/usr/lib/hadoop-hdfs">
-        <include name="**/*.jar" />
-      </fileset>
-      <fileset dir="/usr/lib/hadoop-yarn">
+      <fileset dir="/usr/lib/hadoop/client-0.20">
         <include name="**/*.jar" />
       </fileset>
     </path>
 
     <target name="build">
-        <echo message="${hadoop}" />
         <mkdir dir="${classes}" />
         <javac srcdir="src" destdir="${classes}"  includeantruntime="false" >
           <classpath refid="classpath" />
@@ -45,7 +38,14 @@
     </target>
 
     <target name="main" depends="jar">
-        <java jar="${jar}/${proj}.jar" fork="true" />
+        <delete dir="build.bak" />
+	<exec executable="hadoop">
+    	    <arg value="jar"/>
+    	    <arg value="${jar}/${proj}.jar"/>
+	    <arg value="cp"/>
+    	    <arg value="build.xml" />
+            <arg value="build.bak"/>
+        </exec>
     </target>
 
 </project>

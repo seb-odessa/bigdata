@@ -41,12 +41,12 @@ public class streams {
     AssertNotNull(ostream);
 
     Configuration conf = new Configuration();
-    IOUtils.copyBytes(istream, ostream, conf, true);
-    //
-    // int c;
-    // while ((c = istream.read()) != -1) {
-    //   ostream.write(c);
-    // }
+//    IOUtils.copyBytes(istream, ostream, conf, true);
+    
+     int c;
+     while ((c = istream.read()) != -1) {
+       ostream.write(c);
+     }
 
     istream.close();
     ostream.close();
