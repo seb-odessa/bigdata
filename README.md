@@ -4,7 +4,7 @@ This project for home works
 #hdfs 
 Contains tool for 
 - uploading local files to the (remote) HDFS. 
-- dounloading frm the HDFS to the local filesystem
+- dounloading from the (remote) HDFS to the local filesystem
 
 Usage:
 
