@@ -1,7 +1,7 @@
 # Big Data
 This project for home works
 
-#hdfs 
+#hdfs - Hadoop API 
 Contains tool for 
 - uploading local files to the (remote) HDFS. 
 - dounloading from the (remote) HDFS to the local filesystem
