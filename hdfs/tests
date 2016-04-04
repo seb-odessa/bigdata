@@ -9,10 +9,22 @@ for REMOTE in \
     hdfs://quickstart.cloudera:8020/users/coudera/${TARGET} \
     ; 
 do
-echo hadoop jar jar/hdfs.jar put ${TARGET} ${REMOTE}
-hadoop jar jar/hdfs.jar put ${TARGET} ${REMOTE} || exit
-hadoop fs -get ${REMOTE} ${TEMPOR}
-hadoop fs -rm  ${REMOTE}
-cmp --silent ${TARGET} ${TEMPOR} && echo Ok || echo Failure
+echo -n hadoop jar jar/hdfs.jar put ${TARGET} ${REMOTE}
+#hadoop fs -put ${REMOTE} ${TEMPOR}
+hadoop jar jar/hdfs.jar put ${TARGET} ${REMOTE} \
+    && echo "- Ok" || (echo " - Failure" && exit)
+
+echo -n hadoop jar jar/hdfs.jar get ${REMOTE} ${TEMPOR} 
+#hadoop fs -get ${REMOTE} ${TEMPOR}
+hadoop jar jar/hdfs.jar get ${REMOTE} ${TEMPOR} \
+    && echo "- Ok" || (echo " - Failure" && exit)
+
+echo hadoop fs -rm  ${REMOTE}
+hadoop fs -rm  ${REMOTE} 2&> /dev/null 
+
+echo -n Compare ${TARGET} ${TEMPOR}
+cmp --silent ${TARGET} ${TEMPOR} \
+    && echo "- Ok" || (echo " - Failure" && exit)
+
 rm ${TEMPOR}
 done

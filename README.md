@@ -1,10 +1,10 @@
 # Big Data
 This project for home works
 
-#Exercise 1. Hadoop API - hdfs project 
-Contains tool for 
-- uploading local files to the (remote) HDFS. 
-- dounloading from the (remote) HDFS to the local filesystem
+#Lesson 1. HDFS Java API - hdfs project 
+Implement tool for:
+- upload local file to the HDFS.
+- dounload from the HDFS to the local filesystem
 
 Usage:
 

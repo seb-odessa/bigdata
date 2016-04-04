@@ -23,24 +23,17 @@ public class hdfs {
 
 
   public static void main(String[] args) throws Exception {
-    if (args.length == 0) {
-      usage();
-      return;
-    }
     if (args.length == 3) {
       switch (args[0]) {
         case "put" :
         command.put(args[1], args[2]);
-        break;
+        return;
 
         case "get" :
         command.get(args[1], args[2]);
-        break;
-
-        default:
-        usage();
-        break;
+        return;
       }
     }
+    usage();
   }
 }

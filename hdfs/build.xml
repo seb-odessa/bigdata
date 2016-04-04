@@ -6,11 +6,6 @@
     <property environment="env" />
 
     <path id="classpath">
-<!--    
-      <fileset dir="${jar}">
-        <include name="*.jar" />
-      </fileset>
--->      
       <fileset dir="${classes}">
         <include name="/*.class" />
       </fileset>
@@ -21,6 +16,7 @@
 
     <target name="clean">
         <delete dir="${classes}" />
+        <delete dir="${jar}" />
     </target>
 
     <target name="build" depends="clean">

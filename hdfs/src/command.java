@@ -7,7 +7,7 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 
 public class command {
-  
+
   public static void put(String ifile, String ofile)
   throws IllegalArgumentException,  IOException {
     Configuration conf = new Configuration();
