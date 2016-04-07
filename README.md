@@ -1,7 +1,7 @@
 # Big Data
 This project for home works
 
-#Lesson 1. HDFS Java API - hdfs project 
+#Lesson 2. HDFS Java API
 Implement tool for:
 - upload local file to the HDFS.
 - dounload from the HDFS to the local filesystem
