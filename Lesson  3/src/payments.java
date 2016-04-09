@@ -1,7 +1,6 @@
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
@@ -10,68 +9,68 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class payments {
 
-  public static class PaymentMapper
-          extends Mapper<Object, Text, IntWritable, DoubleWritable>{
-    private IntWritable id = new IntWritable();
-    private DoubleWritable payment = new DoubleWritable();
-    private Pattern pattern =
-            Pattern.compile("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2} (\\d+) ([\\d.]+)");
+    public static class PaymentMapper extends Mapper<Object, Text, IntWritable, RecordWritable>{
+        private IntWritable id = new IntWritable();
+        private RecordWritable record = new RecordWritable();
+        private Pattern pattern =  Pattern.compile("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2} (\\d+) ([\\d.]+) ([\\w./]+)");
 
-    public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
-      Matcher matcher = pattern.matcher(value.toString());
-      if (matcher.find()) {
-        id.set(Integer.parseInt(matcher.group(1)));
-        payment.set(Double.parseDouble(matcher.group(2)));
-        context.write(id, payment);
-      }
+        public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
+            Matcher matcher = pattern.matcher(value.toString());
+            if (matcher.find()) {
+                id.set(Integer.parseInt(matcher.group(1)));
+                record.set(Double.parseDouble(matcher.group(2)), matcher.group(3));
+                context.write(id, record);
+            }
+        }
     }
-  }
 
-  public static class PaymentReducer
-          extends Reducer<IntWritable, DoubleWritable, IntWritable, DoubleWritable> {
-    private IntWritable id = new IntWritable();
-    private DoubleWritable payment = new DoubleWritable();
+    public static class PaymentReducer extends Reducer<IntWritable, RecordWritable, IntWritable, ReducedWritable> {
+        private ReducedWritable record = new ReducedWritable();
 
-    public void reduce(IntWritable key, Iterable<DoubleWritable> values, Context context) throws IOException, InterruptedException {
-      double sum = 0;
-      for (DoubleWritable payment: values) {
-        sum += payment.get();
-      }
-      payment.set(sum);
-      context.write(key, payment);
+        public void reduce(IntWritable key, Iterable<RecordWritable> records, Context context) throws IOException, InterruptedException {
+            record.clear();
+            for (RecordWritable value: records) {
+                record.add(value.payment, value.store);
+            }
+            context.write(key, record);
+        }
     }
-  }
 
-  private static void usage() {
-    System.out.println("Usage: hadoop jar payments.jar <input> <output>");
-    System.out.println("\thadoop jar payments.jar  /user/seb/payments.log .");
-  }
-  public static void main(String[] args) throws Exception {
-    if (args.length != 2) {
-      usage();
-      return;
+    private static void usage() {
+        System.out.println("Usage: hadoop jar payments.jar <input> <output>");
+        System.out.println("\thadoop jar payments.jar  /user/seb/payments.log .");
     }
-    Configuration conf = new Configuration();
 
-    Job job = Job.getInstance(conf, "Customer payments");
-    job.setJarByClass(payments.class);
+    public static void main(String[] args) throws Exception {
+        if (args.length != 2) {
+            usage();
+            return;
+        }
 
-    job.setMapperClass(PaymentMapper.class);
-    job.setCombinerClass(PaymentReducer.class);
-    job.setReducerClass(PaymentReducer.class);
+        Configuration conf = new Configuration();
 
-    job.setOutputKeyClass(IntWritable.class);
-    job.setOutputValueClass(DoubleWritable.class);
+        Job job = Job.getInstance(conf, "Customer_Payments");
+        job.setJarByClass(payments.class);
 
-    FileInputFormat.addInputPath(job, new Path(args[0]));
-    FileOutputFormat.setOutputPath(job, new Path(args[1]));
+        FileInputFormat.addInputPath(job, new Path(args[0]));
+        FileOutputFormat.setOutputPath(job, new Path(args[1]));
 
-    System.exit(job.waitForCompletion(true) ? 0 : 1);
-  }
+        job.setMapperClass(PaymentMapper.class);
+        job.setReducerClass(PaymentReducer.class);
+
+        job.setMapOutputKeyClass(IntWritable.class);
+        job.setMapOutputValueClass(RecordWritable.class);
+
+        job.setOutputKeyClass(IntWritable.class);
+        job.setOutputValueClass(ReducedWritable.class);
+
+        job.setOutputFormatClass(JsonOutput.class);
+
+        System.exit(job.waitForCompletion(true) ? 0 : 1);
+    }
 }
