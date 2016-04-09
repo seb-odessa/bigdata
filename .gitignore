@@ -5,6 +5,7 @@
 build/
 jar/
 */classes/
+*/.idea/*
 
 # Package Files #
 *.jar
