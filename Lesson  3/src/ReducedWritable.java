@@ -14,7 +14,7 @@ import java.util.TreeSet;
 
 public class ReducedWritable implements Writable  {
     public Double total;
-    public Set<String> stores = new TreeSet<String>();
+    public Set<String> stores = new TreeSet();
 
     public void add(double payment, String store) {
         total += payment;

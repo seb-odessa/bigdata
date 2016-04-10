@@ -17,9 +17,10 @@ public class payments {
     public static class PaymentMapper extends Mapper<Object, Text, IntWritable, RecordWritable>{
         private IntWritable id = new IntWritable();
         private RecordWritable record = new RecordWritable();
-        private Pattern pattern =  Pattern.compile("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2} (\\d+) ([\\d.]+) ([\\w./]+)");
+        private Pattern pattern =
+                Pattern.compile("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2} (\\d+) ([\\d.]+) ([\\w./]+)");
 
-        public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
+        public void map(Object _, Text value, Context context) throws IOException, InterruptedException {
             Matcher matcher = pattern.matcher(value.toString());
             if (matcher.find()) {
                 id.set(Integer.parseInt(matcher.group(1)));
@@ -32,7 +33,8 @@ public class payments {
     public static class PaymentReducer extends Reducer<IntWritable, RecordWritable, IntWritable, ReducedWritable> {
         private ReducedWritable record = new ReducedWritable();
 
-        public void reduce(IntWritable key, Iterable<RecordWritable> records, Context context) throws IOException, InterruptedException {
+        public void reduce(IntWritable key, Iterable<RecordWritable> records, Context context)
+                throws IOException, InterruptedException {
             record.clear();
             for (RecordWritable value: records) {
                 record.add(value.payment, value.store);

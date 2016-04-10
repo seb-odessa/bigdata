@@ -1,6 +1,3 @@
-# Big Data
-This project for home works
-
 #Lesson 2. HDFS
 Implement tool for:
 - upload local file to the HDFS.
@@ -19,7 +16,6 @@ Usage:
 	hadoop jar hdfs.jar get hdfs://localhost/users/coudera/source_file destination_file
 
 #Lesson 3. MapReduce
-
 	$ hdfs dfsadmin -printTopology
 	16/04/09 12:21:09 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
 	Rack: /default-rack
@@ -44,11 +40,12 @@ Usage:
 	2014-07-02 20:52:40 12 54.95 www.store2.com
 	2014-07-02 20:52:40 1 77.70 www.store3.com
 	2014-07-02 20:52:40 12 1.99 www.store4.com
+
     $ hadoop jar jar/payments.jar /user/seb/payments.log out
     $ hdfs dfs -cat /user/seb/out/*
-    { "id":1,"total":106,72,"stores":["www.store1.com", "www.store3.com"] }
-    { "id":12,"total":185,66,"stores":["www.store2.com", "www.store4.com"] }
-    { "id":1123,"total":16,50,"stores":["www.store1.com"] }
+    { "id":1, "total":106.72, "stores":["www.store1.com", "www.store3.com"] }
+    { "id":12, "total":185.66, "stores":["www.store2.com", "www.store4.com"] }
+    { "id":1123, "total":16.50, "stores":["www.store1.com"] }
 
 # Links and tips
 

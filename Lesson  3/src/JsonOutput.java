@@ -13,6 +13,7 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.Locale;
 
 
 public class JsonOutput extends TextOutputFormat<IntWritable, ReducedWritable> {
@@ -30,8 +31,8 @@ public class JsonOutput extends TextOutputFormat<IntWritable, ReducedWritable> {
             //{"id":1,"total":106.72,"stores":["www.store1.com","www.store3.com"] }
 
             out.writeChars("{ ");
-            out.writeChars("\"id\":" + key.toString() + ",");
-            out.writeChars("\"total\":" + String.format("%.2f", value.total) + ",");
+            out.writeChars("\"id\":" + key.toString() + ", ");
+            out.writeChars("\"total\":" + String.format(Locale.US, "%.2f", value.total) + ", ");
             out.writeChars("\"stores\":[");
             boolean first = true;
             Iterator i = value.stores.iterator();
