@@ -76,11 +76,10 @@ Payment processing:
 	2014-07-02 20:52:40 12 54.95 www.store2.com
 	2014-07-02 20:52:40 1 77.70 www.store3.com
 	2014-07-02 20:52:40 12 1.99 www.store4.com
-
-    	$ hadoop jar jar/payments.jar /user/seb/payments.log out
-    	$ hdfs dfs -cat /user/seb/out/*
-
-    	{ "id":1, "total":106.72, "stores":["www.store1.com", "www.store3.com"] }
+	
+	$ hadoop jar jar/payments.jar /user/seb/payments.log out
+	$ hdfs dfs -cat /user/seb/out/*
+	{ "id":1, "total":106.72, "stores":["www.store1.com", "www.store3.com"] }
     	{ "id":12, "total":185.66, "stores":["www.store2.com", "www.store4.com"] }
     	{ "id":1123, "total":16.50, "stores":["www.store1.com"] }
 
