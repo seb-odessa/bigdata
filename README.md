@@ -61,27 +61,13 @@ Payment processing:
 
 	$ hdfs dfs -put Lessons/bigdata-session-3/datasets/payments.log /user/seb
 	$ hdfs dfs -ls /user/seb
-	Found 2 items
-	-rw-r--r--   3 seb supergroup     854362 2016-04-09 12:29 /user/seb/facebook_combined.txt
+	Found 1 items
 	-rw-r--r--   3 seb supergroup        436 2016-04-09 12:28 /user/seb/payments.log
-
-	$ hdfs dfs -cat /user/seb/payments.log
-	2014-07-02 20:52:39 1 12.01 www.store1.com
-	2014-07-02 20:52:39 1123 1.75 www.store1.com
-	2014-07-02 20:52:39 12 4.05 www.store2.com
-	2014-07-02 20:52:39 1 7.87 www.store1.com
-	2014-07-02 20:52:40 12 124.67 www.store2.com
-	2014-07-02 20:52:40 1 9.14 www.store3.com
-	2014-07-02 20:52:40 1123 14.75 www.store1.com
-	2014-07-02 20:52:40 12 54.95 www.store2.com
-	2014-07-02 20:52:40 1 77.70 www.store3.com
-	2014-07-02 20:52:40 12 1.99 www.store4.com
-	
 	$ hadoop jar jar/payments.jar /user/seb/payments.log out
 	$ hdfs dfs -cat /user/seb/out/*
 	{ "id":1, "total":106.72, "stores":["www.store1.com", "www.store3.com"] }
-    	{ "id":12, "total":185.66, "stores":["www.store2.com", "www.store4.com"] }
-    	{ "id":1123, "total":16.50, "stores":["www.store1.com"] }
+	{ "id":12, "total":185.66, "stores":["www.store2.com", "www.store4.com"] }
+	{ "id":1123, "total":16.50, "stores":["www.store1.com"] }
 
 # Links and tips
 
