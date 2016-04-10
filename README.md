@@ -16,6 +16,49 @@ Usage:
 	hadoop jar hdfs.jar get hdfs://localhost/users/coudera/source_file destination_file
 
 #Lesson 3. MapReduce
+Hadoop environment:
+
+	$ cat jps_report 
+	#!/bin/sh
+
+	SLAVES=$HADOOP_CONF_DIR/slaves
+	for host in $(hostname && cat ${SLAVES}); do
+    		echo $host:
+    		ssh $host jps
+    		echo =======================
+	done
+
+	$ ./jps_report
+	vm0:
+	5112 Jps
+	3987 NameNode
+	4205 SecondaryNameNode
+	4484 ResourceManager
+	=======================
+	vm1:
+	1972 JobHistoryServer
+	2151 Jps
+	1449 DataNode
+	1607 NodeManager
+	=======================
+	vm2:
+	608 DataNode
+	760 NodeManager
+	1163 Jps
+	=======================
+	vm3:
+	507 DataNode
+	1062 Jps
+	659 NodeManager
+	=======================
+	vm4:
+	1389 Jps
+	715 DataNode
+	983 NodeManager
+	=======================
+
+Payment processing:
+
 	$ hdfs dfsadmin -printTopology
 	16/04/09 12:21:09 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
 	Rack: /default-rack
