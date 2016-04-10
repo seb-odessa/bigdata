@@ -1,4 +1,4 @@
-#Lesson 2. HDFS
+##Lesson 2. HDFS
 Implement tool for:
 - upload local file to the HDFS.
 - dounload from the HDFS to the local filesystem
@@ -15,9 +15,9 @@ Usage:
 	hadoop jar hdfs.jar get hdfs://localhost/users/coudera/source_file .
 	hadoop jar hdfs.jar get hdfs://localhost/users/coudera/source_file destination_file
 
-#Lesson 3. MapReduce
+##Lesson 3. MapReduce
 Hadoop environment:
-
+```
 	$ cat jps_report 
 	#!/bin/sh
 
@@ -56,9 +56,9 @@ Hadoop environment:
 	715 DataNode
 	983 NodeManager
 	=======================
-
+```
 Payments processing:
-
+```
 	$ hdfs dfs -put Lessons/bigdata-session-3/datasets/payments.log /user/seb
 	$ hdfs dfs -ls /user/seb
 	Found 1 items
@@ -69,12 +69,13 @@ Payments processing:
 	{ "id":1, "total":106.72, "stores":["www.store1.com", "www.store3.com"] }
 	{ "id":12, "total":185.66, "stores":["www.store2.com", "www.store4.com"] }
 	{ "id":1123, "total":16.50, "stores":["www.store1.com"] }
+```
 
-# Links and tips
+## Links and tips
+- [Hadoop cluster in LXC](https://ofirm.wordpress.com/2014/01/05/creating-a-virtualized-fully-distributed-hadoop-cluster-using-linux-containers/)
 
--Hadoop cluster in LXC:
 
-	https://ofirm.wordpress.com/2014/01/05/creating-a-virtualized-fully-distributed-hadoop-cluster-using-linux-containers/
+	
 	
 
 
