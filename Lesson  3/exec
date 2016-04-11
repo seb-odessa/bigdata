@@ -1,0 +1,16 @@
+#!/bin/sh
+
+HDFS_DIR=/user/$(whoami)
+DATA_DIR=$HDFS_DIR/dataset
+DATA_FILE=payments.log
+LOCAL_FILE=dataset/$DATA_FILE
+REMOTE_FILE=$DATA_DIR/$DATA_FILE
+RESULTS_DIR=payments_out
+RUN=../tools/exec
+
+$RUN hdfs dfs -test -d $HDFS_DIR || $RUN hdfs dfs -mkdir $HDFS_DIR
+$RUN hdfs dfs -test -d $DATA_DIR || $RUN hdfs dfs -mkdir $DATA_DIR
+$RUN hdfs dfs -test -f $REMOTE_FILE || $RUN hdfs dfs -put $LOCAL_FILE $REMOTE_FILE
+$RUN hdfs dfs -test -d $RESULTS_DIR && $RUN hdfs dfs -rm -r $RESULTS_DIR
+$RUN yarn jar jar/payments.jar $REMOTE_FILE $RESULTS_DIR
+$RUN hdfs dfs -cat $RESULTS_DIR/*
