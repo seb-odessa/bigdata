@@ -70,10 +70,12 @@ Payments processing:
 	{ "id":12, "total":185.66, "stores":["www.store2.com", "www.store4.com"] }
 	{ "id":1123, "total":16.50, "stores":["www.store1.com"] }
 ```
+##Lesson 4. KeyValue storage (Voldemort)
+Hadoop environment:
 
 ## Links and tips
 - [Hadoop cluster in LXC](https://ofirm.wordpress.com/2014/01/05/creating-a-virtualized-fully-distributed-hadoop-cluster-using-linux-containers/)
-
+- [Building Voldemort read-only stores with Hadoop](http://blog.intelligencecomputing.io/cloud/487/repostbuilding-voldemort-read-only-stores-with-hadoop)
 
 	
 	
