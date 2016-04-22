@@ -10,6 +10,9 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import java.io.IOException;
 import java.util.StringTokenizer;
+import org.json.simple.JSONObject;
+
+
 
 public class facebook {
 
@@ -28,10 +31,11 @@ public class facebook {
     public static class FacebookReducer extends Reducer<IntWritable, IntWritable, IntWritable, Text> {
         private Text  friends = new Text();
         private StringBuilder sb = new StringBuilder();
+        JSONObject jsn = new JSONObject();
 
         public void reduce(IntWritable key, Iterable<IntWritable> records, Context context)
                 throws IOException, InterruptedException {
-            
+
             for (IntWritable friend: records) {
                 if (sb.length() > 0)
                     sb.append(" ");
