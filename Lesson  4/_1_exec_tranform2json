@@ -1,0 +1,25 @@
+#!/bin/sh
+
+# tools
+RESULTS=report
+RUN=../tools/exec
+
+# data
+HDFS_DIR=/user/$(whoami)
+DATA_DIR=$HDFS_DIR/dataset
+DATA_FILE=facebook_combined.txt
+DATA_LOCAL=dataset/$DATA_FILE
+DATA_REMOTE=$DATA_DIR/$DATA_FILE
+
+WD="$(pwd)"
+cd ../
+JARS=$(pwd)/jars
+cd "$WD"
+
+export LIBJARS=$JARS/json-simple-1.1.1.jar
+export HADOOP_CLASSPATH=$(echo ${LIBJARS} | sed s/,/:/g)
+
+ant jar
+$RUN hdfs dfs -test -d $RESULTS && $RUN hdfs dfs -rm -r $RESULTS
+$RUN yarn jar jar/facebook.jar json $DATA_REMOTE $RESULTS -libjars $LIBJARS
+$RUN hdfs dfs -cat $RESULTS/*

@@ -1,0 +1,26 @@
+#!/bin/sh
+
+# tools
+RESULTS=report
+RUN=../tools/exec
+
+# data
+HDFS_HOME=/user/$(whoami)
+FS_HOME=$HDFS_HOME/fs
+SCHEMA=$HDFS_HOME/schema
+
+WD="$(pwd)"
+cd ../
+JARS=$(pwd)/jars
+cd "$WD"
+
+export LIBJARS=$JARS/json-simple-1.1.1.jar
+export HADOOP_CLASSPATH=$(echo ${LIBJARS} | sed s/,/:/g)
+
+java -jar ${JARS}/avro-tools-1.7.7.jar fromjson dataset/part-r-00000 --schema-file schema/facebook-network.avsc > facebook-network.avro
+
+
+exit 
+$RUN hdfs dfs -test -d $FS_HOME || $RUN hdfs dfs -mkdir $FS_HOME || exit
+$RUN hdfs dfs -test -d $SCHEMA || ($RUN hdfs dfs -mkdir $SCHEMA && $RUN hdfs dfs -put schema/* $SCHEMA ) || exit
+$RUN yarn jarr ${JARS}/avro-tools-1.7.7.jar fromjson $RESULTS/part-r-00000 --schema-file $SCHEMA/facebook-network.avsc > $FS_HOME/facebook-network.avro

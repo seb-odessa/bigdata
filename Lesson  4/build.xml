@@ -33,6 +33,7 @@
             <manifest>
                 <attribute name="Main-Class" value="${proj}"/>
             </manifest>
+<!--	    <fileset dir="../jars" includes="json-simple-1.1.1.jar" /> -->
         </jar>
     </target>
 

@@ -1,0 +1,9 @@
+{
+    "namespace": "facebook",
+    "type" : "record",
+    "name" : "facebook.friends",
+    "fields" : [
+        { "name" : "id", "type" : "int" },
+        { "name" : "friends", "type":  { "type":"array", "items" : "int" } }
+    ]
+}

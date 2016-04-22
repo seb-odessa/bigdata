@@ -1,0 +1,9 @@
+#!/bin/sh
+
+ssh home lxc-ls -f
+
+for vm in $(cat hosts); do
+    echo $vm
+    ssh home lxc-start -d -n $vm
+    echo =======================
+done

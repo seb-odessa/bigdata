@@ -1,0 +1,7 @@
+#!/bin/sh
+
+for host in $(cat hosts); do
+    echo $host:
+    ssh $host jps
+    echo =======================
+done
