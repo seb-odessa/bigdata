@@ -22,7 +22,7 @@ import java.util.StringTokenizer;
  */
 public class json extends Configured implements Tool {
 
-    public static class PlainTextMapper
+    public static class TextMapper
             extends Mapper<Object, Text, IntWritable, IntWritable> {
         private IntWritable id = new IntWritable();
         private IntWritable friend = new IntWritable();
@@ -53,13 +53,13 @@ public class json extends Configured implements Tool {
 
     public final int run(final String[] args) throws Exception {
         Configuration conf = super.getConf();
-        Job job = Job.getInstance(conf, "Facebook to JSON transformer");
+        Job job = Job.getInstance(conf, "Facebook Network to JSON Transformation");
         job.setJarByClass(json.class);
 
         FileInputFormat.addInputPath(job, new Path(args[1]));
         FileOutputFormat.setOutputPath(job, new Path(args[2]));
 
-        job.setMapperClass(PlainTextMapper.class);
+        job.setMapperClass(TextMapper.class);
         job.setMapOutputKeyClass(IntWritable.class);
         job.setMapOutputValueClass(IntWritable.class);
 

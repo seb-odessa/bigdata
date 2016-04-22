@@ -5,7 +5,7 @@ public class facebook {
 
     private static void usage(final String[] args) {
         System.out.println("Usage:\n\thadoop jar facebook.jar <friends|json|avro> <input> <output>");
-        System.out.print("\thadoop jar facebook.jar ");
+        System.out.println("\thadoop jar facebook.jar ");
         for(int i = 0; i < args.length; ++i)
             System.out.print(args[i] + " ");
         System.out.println();

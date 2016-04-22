@@ -1,5 +1,5 @@
 {
-    "namespace": "facebook",
+    "namespace": "schema",
     "type" : "record",
     "name" : "network",
     "fields" : [

@@ -20,7 +20,7 @@ import java.util.StringTokenizer;
  */
 public class friends extends Configured implements Tool {
 
-    public static class PlainTextMapper
+    public static class TextMapper
             extends Mapper<Object, Text, IntWritable, IntWritable> {
         private IntWritable id = new IntWritable();
         private IntWritable friend = new IntWritable();
@@ -61,7 +61,7 @@ public class friends extends Configured implements Tool {
         FileInputFormat.addInputPath(job, new Path(args[1]));
         FileOutputFormat.setOutputPath(job, new Path(args[2]));
 
-        job.setMapperClass(PlainTextMapper.class);
+        job.setMapperClass(TextMapper.class);
         job.setMapOutputKeyClass(IntWritable.class);
         job.setMapOutputValueClass(IntWritable.class);
 

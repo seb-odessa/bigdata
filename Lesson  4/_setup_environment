@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# tools
+RESULTS=results
+RUN=../tools/exec
+
+# data
+HDFS_ROOT=/user/$(whoami)
+DATASET=$HDFS_ROOT/dataset
+SCHEMAS=$HDFS_ROOT/schemas
+
+TEXT_TARGET=$DATASET/facebook-network.text
+JSON_TARGET=$DATASET/facebook-network.json
+AVRO_TARGET=$DATASET/facebook-network.avro
+WD="$(pwd)"
+cd ../
+JARS=$(pwd)/jars
+cd "$WD"
+

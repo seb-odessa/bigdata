@@ -1,16 +1,14 @@
 #!/bin/sh
 
-# tools
-RESULTS=report
-RUN=../tools/exec
+. ./_setup_environment
 
-# data
-HDFS_DIR=/user/$(whoami)
-DATA_DIR=$HDFS_DIR/dataset
-DATA_FILE=facebook_combined.txt
-DATA_LOCAL=dataset/$DATA_FILE
-DATA_REMOTE=$DATA_DIR/$DATA_FILE
+$RUN hdfs dfs -test -d $HDFS_ROOT || $RUN hdfs dfs -mkdir $HDFS_ROOT || exit
+$RUN hdfs dfs -test -d $DATASET || $RUN hdfs dfs -mkdir $DATASET || exit
+$RUN hdfs dfs -test -d $SCHEMAS || $RUN hdfs dfs -mkdir $SCHEMAS || exit
 
-$RUN hdfs dfs -test -d $HDFS_DIR || $RUN hdfs dfs -mkdir $HDFS_DIR || exit
-$RUN hdfs dfs -test -d $DATA_DIR || $RUN hdfs dfs -mkdir $DATA_DIR || exit
-$RUN hdfs dfs -test -f $DATA_REMOTE || $RUN hdfs dfs -put $DATA_LOCAL $DATA_REMOTE || exit
+for avsc in facebook-friends.avsc facebook-network.avsc
+do
+    $RUN hdfs dfs -test -f $SCHEMAS/${avsc} || $RUN hdfs dfs -put schema/${avsc} $SCHEMAS || exit
+done
+
+

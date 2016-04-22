@@ -12,6 +12,9 @@
       <fileset dir="/usr/lib/hadoop/">
         <include name="**/*.jar" />
       </fileset>
+      <fileset dir="../jars/">
+        <include name="**/*.jar" />
+      </fileset>
     </path>
 
     <target name="clean">
@@ -33,7 +36,6 @@
             <manifest>
                 <attribute name="Main-Class" value="${proj}"/>
             </manifest>
-<!--	    <fileset dir="../jars" includes="json-simple-1.1.1.jar" /> -->
         </jar>
     </target>
 
