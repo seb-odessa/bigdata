@@ -1,0 +1,30 @@
+#!/bin/sh
+
+
+RUN=../tools/exec
+
+HIVE_USER=hive
+HIVE_HOME=/home/$HIVE
+HIVE_VERSION=2.0.0
+HIVE_NAME=apache-hive-${HIVE_VERSION}-bin
+HIVE_ARC=$HIVE_NAME.tar.gz
+HIVE_URL=http://apache.hippo.nl/hive/hive-2.0.0/$HIVE_ARC
+HADOOP_HOME=/home/hduser
+#$RUN ssh vm0 sudo deluser --remove-home $HIVE_USER
+#$RUN ssh vm0 sudo useradd $HIVE_USER -m -s /bin/bash
+$RUN ssh vm0 sudo cp /home/hduser/.bashrc $HIVE_HOME
+#$RUN ssh vm0 sudo cp -r /home/hduser/.ssh $HIVE_HOME
+$RUN ssh vm0 sudo chown hive:hive -R $HIVE_HOME
+#$RUN ssh hive@vm0 wget -qc $HIVE_URL
+#$RUN ssh hive@vm0 tar -xzf $HIVE_ARC
+#$RUN ssh hive@vm0 ln -s $HIVE_NAME/* ./
+#$RUN ssh hive@vm0 "$HADOOP_HOME/bin/hadoop version"
+#$RUN ssh hive@vm0 "$HADOOP_HOME/bin/hadoop fs -mkdir       /tmp"
+#$RUN ssh hive@vm0 "$HADOOP_HOME/bin/hadoop fs -mkdir       /user/hive"
+#$RUN ssh hive@vm0 "$HADOOP_HOME/bin/hadoop fs -mkdir       /user/hive/warehouse"
+#$RUN ssh hive@vm0 "$HADOOP_HOME/bin/hadoop fs -chmod g+w   /tmp"
+#$RUN ssh hive@vm0 "$HADOOP_HOME/bin/hadoop fs -chmod g+w   /user/hive/warehouse"
+
+#$RUN ssh hive@vm0 "$HIVE_HOME/shematool -initSchema -dbType derby"
+
+
