@@ -7,3 +7,5 @@ for vm in $(cat hosts); do
     ssh home lxc-start -d -n $vm
     echo =======================
 done
+
+. cluster_jps
