@@ -79,8 +79,12 @@ Hadoop environment:
 
 	
 	
+##Lesson 5. Apache Hive
 
-
-
-
+-Create several tables on HIVE
+-Create several queries with GROUP BYs, ORDER BYs, JOINs, Subqueries
+-Visualize execution plan with MapReduce
+-Configure HIVE to work on TEZ
+-Visualize execution plan with TEZ
+-Compare execution plans. Write conclusions
 
