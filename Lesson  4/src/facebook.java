@@ -28,7 +28,9 @@ public class facebook {
             case "avro":
                 res = ToolRunner.run(conf, new toolset.avro(), args);
                 break;
-            default:
+            case "csv":
+                res = ToolRunner.run(conf, new toolset.csv(), args);
+                break;            default:
                 usage(args);
         }
 

@@ -10,13 +10,14 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
-
 import toolset.mappers.TextMapper;
-import toolset.reducers.JsonReducer;
+import toolset.reducers.CsvReducer;
+
 /**
- * Created by seb on 22.04.16.
+ * Created by seb on 11.05.16.
  */
-public class json extends Configured implements Tool {
+
+public class csv extends Configured implements Tool {
 
     public final int run(final String[] args) throws Exception {
         Configuration conf = super.getConf();
@@ -30,9 +31,10 @@ public class json extends Configured implements Tool {
         job.setMapOutputKeyClass(IntWritable.class);
         job.setMapOutputValueClass(IntWritable.class);
 
-        job.setReducerClass(JsonReducer.class);
+        job.setReducerClass(CsvReducer.class);
         job.setOutputKeyClass(NullWritable.class);
         job.setOutputValueClass(Text.class);
         return job.waitForCompletion(true) ? 0 : 1;
     }
 }
+

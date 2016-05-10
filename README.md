@@ -88,3 +88,23 @@ Subtasks:
 - Visualize execution plan with TEZ
 - Compare execution plans. Write conclusions
 
+	$ wget -c http://mirror.nl.webzilla.com/apache/hive/hive-1.2.1/apache-hive-1.2.1-bin.tar.gz
+	$ tar -xzf apache-hive-1.2.1-bin.tar.gz
+	$ ln -s apache-hive-1.2.1-bin hive
+	$ export HIVE_HOME=/home/hive/hive
+	
+	$ hdfs dfs -cp /user/seb/dataset/facebook-network.text /user/hive
+	$ $HIVE_HOME/bin/hive
+	hive> create table facebook_network (id int, friend int);
+	OK
+	Time taken: 0.313 seconds
+	hive> show tables;
+	OK
+	facebook_network
+	Time taken: 0.022 seconds, Fetched: 1 row(s)
+	hive> LOAD DATA INPATH '/user/hive/facebook-network.text' INTO TABLE facebook_network;
+	Loading data to table default.facebook_network
+	Table default.facebook_network stats: [numFiles=1, totalSize=851968]
+	OK
+	Time taken: 1.054 seconds
+
