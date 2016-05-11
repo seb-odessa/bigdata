@@ -1,0 +1,22 @@
+#!/bin/bash
+
+
+USERS=dataset/users
+PHONES=dataset/phones
+ROOMS=dataset/rooms
+
+echo -e '1\x01Foo' >  $USERS
+echo -e '2\x01Bar' >> $USERS
+echo -e '3\x01Baz' >> $USERS
+echo -e '4\x01Qux' >> $USERS
+
+echo -e '1\x012\x01200' >  $PHONES
+echo -e '2\x014\x01200' >> $PHONES
+echo -e '3\x013\x01202' >> $PHONES
+echo -e '4\x011\x01200' >> $PHONES
+
+echo -e '1\x014\x0130' >  $ROOMS
+echo -e '2\x011\x0132' >> $ROOMS
+echo -e '3\x013\x0135' >> $ROOMS
+echo -e '4\x012\x0150' >> $ROOMS
+

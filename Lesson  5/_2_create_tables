@@ -1,0 +1,6 @@
+#!/bin/bash
+
+hdfs dfs -put dataset/* /tmp
+
+cat hql/create_tables.hql | ssh vm0 "HADOOP_HOME=/home/hduser ~/hive/bin/hive"
+

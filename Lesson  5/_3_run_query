@@ -1,0 +1,4 @@
+#!/bin/bash
+
+time cat hql/query_execute.hql | ssh vm0 "HADOOP_HOME=/home/hduser ~/hive/bin/hive"
+

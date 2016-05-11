@@ -5,7 +5,7 @@ RUN=../tools/exec
 
 HIVE_USER=hive
 HIVE_HOME=/home/$HIVE
-HIVE_VERSION=2.0.0
+HIVE_VERSION=1.2.1
 HIVE_NAME=apache-hive-${HIVE_VERSION}-bin
 HIVE_ARC=$HIVE_NAME.tar.gz
 HIVE_URL=http://apache.hippo.nl/hive/hive-2.0.0/$HIVE_ARC
