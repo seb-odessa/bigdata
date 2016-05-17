@@ -92,7 +92,7 @@ Subtasks:
 	https://cwiki.apache.org/confluence/display/Hive/GettingStarted#GettingStarted-InstallingHivefromaStableRelease
 	Apache Tez installation:
 	https://github.com/apache/incubator-tez/blob/branch-0.2.0/INSTALL.txt
-
+```
 	$ cat hql/create_tables.hql
 	DROP TABLE IF EXISTS users  PURGE;
 	DROP TABLE IF EXISTS phones PURGE;
@@ -185,4 +185,39 @@ Subtasks:
 	real	0m18.718s
 	user	0m15.079s
 	sys	0m0.423s
+```
+	For complex query:
+```
+	SELECT 
+	    users.id, 
+	    users.name, 
+	    phones.phone_number, 
+	    rooms.room_number,
+	    oc.cnt
+	FROM 
+	    users 
+	    JOIN phones ON users.id = phones.user_id 
+	    JOIN rooms ON phones.id = rooms.phone_id
+	    JOIN (SELECT phone_number, COUNT(*) AS cnt FROM phones GROUP BY phone_number) oc ON oc.phone_number = phones.phone_number
+	ORDER BY 
+	    users.name;
+```
+    Apache Tez results:
+```
+	OK
+	2	Bar	200	32	3
+	3	Baz	202	35	1
+	1	Foo	200	30	3
+	4	Qux	200	50	3
+	Time taken: 13.742 seconds, Fetched: 4 row(s)
+```
+    Default Hadoop Mar/Reduce results:
+```
+	OK
+	2	Bar	200	32	3
+	3	Baz	202	35	1
+	1	Foo	200	30	3
+	4	Qux	200	50	3
+	Time taken: 62.586 seconds, Fetched: 4 row(s)
 
+```
