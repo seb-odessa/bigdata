@@ -80,7 +80,6 @@ Hadoop environment:
 
 
 ##Lesson 5. Apache Hive
-Subtasks:
 - Create several tables on HIVE
 - Create several queries with GROUP BYs, ORDER BYs, JOINs, Subqueries
 - Visualize execution plan with MapReduce
@@ -88,14 +87,19 @@ Subtasks:
 - Visualize execution plan with TEZ
 - Compare execution plans. Write conclusions
 
-	Apache Hive Installation:
-	https://cwiki.apache.org/confluence/display/Hive/GettingStarted#GettingStarted-InstallingHivefromaStableRelease
+Apache Hive Installation:
 
-	Apache Tez installation:
-	https://github.com/apache/incubator-tez/blob/branch-0.2.0/INSTALL.txt
+https://cwiki.apache.org/confluence/display/Hive/GettingStarted#GettingStarted-InstallingHivefromaStableRelease
 
+Apache Tez installation:
+
+https://github.com/apache/incubator-tez/blob/branch-0.2.0/INSTALL.txt
+
+### Several tables int Hive
 ```
 	$ cat hql/create_tables.hql
+```
+```
 	DROP TABLE IF EXISTS users  PURGE;
 	DROP TABLE IF EXISTS phones PURGE;
 	DROP TABLE IF EXISTS rooms  PURGE;
@@ -110,10 +114,10 @@ Subtasks:
 	SELECT * FROM phones;
 	SELECT * FROM rooms;
 ```
-
 ```
-	$ hdfs dfs -put dataset/* /tmp
 	$ hive -f hql/create_tables.hql
+```
+```
 	...
 	OK
 	1	Foo
@@ -134,70 +138,7 @@ Subtasks:
 	4	2	50
 	Time taken: 0.065 seconds, Fetched: 4 row(s)
 ```
-
-```
-	$ cat hql/query_execute_mr.hql
-	SET hive.execution.engine=mr;
-	SELECT * FROM users ORDER BY name;
-	SELECT COUNT(*), phone_number FROM phones GROUP BY phone_number;
-	SELECT phone_number, cnt FROM (SELECT phone_number, COUNT(*) AS cnt FROM phones GROUP BY phone_number) t2 WHERE t2.CNT > 1;
-```
-```
-	$ time  hive -f hql/query_execute_mr.hql
-	...
-	OK
-	2	Bar
-	3	Baz
-	1	Foo
-	4	Qux
-	Time taken: 17.159 seconds, Fetched: 4 row(s)
-	...
-	OK
-	3	200
-	1	202
-	Time taken: 15.525 seconds, Fetched: 2 row(s)
-	...
-	OK
-	200	3
-	Time taken: 15.285 seconds, Fetched: 1 row(s)
-
-	real	0m54.977s
-	user	0m17.405s
-	sys	0m0.568s
-```
-
-```
-	$ cat hql/query_execute_tez.hql
-	SET hive.execution.engine=tez;
-	SELECT * FROM users ORDER BY name;
-	SELECT COUNT(*), phone_number FROM phones GROUP BY phone_number;
-	SELECT phone_number, cnt FROM (SELECT phone_number, COUNT(*) AS cnt FROM phones GROUP BY phone_number) t2 WHERE t2.CNT > 1;
-```
-```
-	$ time hive -f  hql/query_execute_tez.hql
-	...
-	OK
-	2	Bar
-	3	Baz
-	1	Foo
-	4	Qux
-	Time taken: 10.186 seconds, Fetched: 4 row(s)
-	...
-	OK
-	3	200
-	1	202
-	Time taken: 1.176 seconds, Fetched: 2 row(s)
-	...
-	OK
-	200	3
-	Time taken: 0.975 seconds, Fetched: 1 row(s)
-
-	real	0m18.718s
-	user	0m15.079s
-	sys	0m0.423s
-```
-
-	For complex query:
+### Query with GROUP BYs, ORDER BYs, JOINs, Subqueries
 ```
 	SELECT 
 	    users.id, 
@@ -213,6 +154,98 @@ Subtasks:
 	ORDER BY 
 	    users.name;
 ```
+#### Execution plan with Map/Reduce:
+```
+EXPLAIN SELECT * FROM users ORDER BY name;
+STAGE DEPENDENCIES:
+  Stage-1 is a root stage
+  Stage-0 depends on stages: Stage-1
+
+STAGE PLANS:
+OK
+  Stage: Stage-1
+    Map Reduce
+      Map Operator Tree:
+          TableScan
+            alias: users
+            Statistics: Num rows: 1 Data size: 24 Basic stats: COMPLETE Column stats: NONE
+            Select Operator
+              expressions: id (type: int), name (type: string)
+              outputColumnNames: _col0, _col1
+              Statistics: Num rows: 1 Data size: 24 Basic stats: COMPLETE Column stats: NONE
+              Reduce Output Operator
+                key expressions: _col1 (type: string)
+                sort order: +
+                Statistics: Num rows: 1 Data size: 24 Basic stats: COMPLETE Column stats: NONE
+                value expressions: _col0 (type: int)
+      Reduce Operator Tree:
+        Select Operator
+          expressions: VALUE._col0 (type: int), KEY.reducesinkkey0 (type: string)
+          outputColumnNames: _col0, _col1
+          Statistics: Num rows: 1 Data size: 24 Basic stats: COMPLETE Column stats: NONE
+          File Output Operator
+            compressed: false
+            Statistics: Num rows: 1 Data size: 24 Basic stats: COMPLETE Column stats: NONE
+            table:
+                input format: org.apache.hadoop.mapred.TextInputFormat
+                output format: org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat
+                serde: org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe
+
+  Stage: Stage-0
+    Fetch Operator
+      limit: -1
+      Processor Tree:
+        ListSink
+
+hive> Time taken: 1.043 seconds, Fetched: 39 row(s)
+```
+#### Execution plan with Tez:
+```
+hive> EXPLAIN SELECT * FROM users ORDER BY name;
+OK
+STAGE DEPENDENCIES:
+  Stage-1 is a root stage
+  Stage-0 depends on stages: Stage-1
+
+STAGE PLANS:
+  Stage: Stage-1
+    Map Reduce
+      Map Operator Tree:
+          TableScan
+            alias: users
+            Statistics: Num rows: 1 Data size: 24 Basic stats: COMPLETE Column stats: NONE
+            Select Operator
+              expressions: id (type: int), name (type: string)
+              outputColumnNames: _col0, _col1
+              Statistics: Num rows: 1 Data size: 24 Basic stats: COMPLETE Column stats: NONE
+              Reduce Output Operator
+                key expressions: _col1 (type: string)
+                sort order: +
+                Statistics: Num rows: 1 Data size: 24 Basic stats: COMPLETE Column stats: NONE
+                value expressions: _col0 (type: int)
+      Reduce Operator Tree:
+        Select Operator
+          expressions: VALUE._col0 (type: int), KEY.reducesinkkey0 (type: string)
+          outputColumnNames: _col0, _col1
+          Statistics: Num rows: 1 Data size: 24 Basic stats: COMPLETE Column stats: NONE
+          File Output Operator
+            compressed: false
+            Statistics: Num rows: 1 Data size: 24 Basic stats: COMPLETE Column stats: NONE
+            table:
+                input format: org.apache.hadoop.mapred.TextInputFormat
+                output format: org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat
+                serde: org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe
+
+  Stage: Stage-0
+    Fetch Operator
+      limit: -1
+      Processor Tree:
+        ListSink
+
+hive> Time taken: 1.034 seconds, Fetched: 39 row(s)
+```
+
+
     Apache Tez results:
 ```
 	OK
