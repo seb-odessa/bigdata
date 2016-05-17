@@ -90,8 +90,10 @@ Subtasks:
 
 	Apache Hive Installation:
 	https://cwiki.apache.org/confluence/display/Hive/GettingStarted#GettingStarted-InstallingHivefromaStableRelease
+
 	Apache Tez installation:
 	https://github.com/apache/incubator-tez/blob/branch-0.2.0/INSTALL.txt
+
 ```
 	$ cat hql/create_tables.hql
 	DROP TABLE IF EXISTS users  PURGE;
@@ -107,7 +109,9 @@ Subtasks:
 	SELECT * FROM users;
 	SELECT * FROM phones;
 	SELECT * FROM rooms;
+```
 
+```
 	$ hdfs dfs -put dataset/* /tmp
 	$ hive -f hql/create_tables.hql
 	...
@@ -129,13 +133,16 @@ Subtasks:
 	3	3	35
 	4	2	50
 	Time taken: 0.065 seconds, Fetched: 4 row(s)
+```
 
+```
 	$ cat hql/query_execute_mr.hql
 	SET hive.execution.engine=mr;
 	SELECT * FROM users ORDER BY name;
 	SELECT COUNT(*), phone_number FROM phones GROUP BY phone_number;
 	SELECT phone_number, cnt FROM (SELECT phone_number, COUNT(*) AS cnt FROM phones GROUP BY phone_number) t2 WHERE t2.CNT > 1;
-
+```
+```
 	$ time  hive -f hql/query_execute_mr.hql
 	...
 	OK
@@ -157,13 +164,16 @@ Subtasks:
 	real	0m54.977s
 	user	0m17.405s
 	sys	0m0.568s
+```
 
+```
 	$ cat hql/query_execute_tez.hql
 	SET hive.execution.engine=tez;
 	SELECT * FROM users ORDER BY name;
 	SELECT COUNT(*), phone_number FROM phones GROUP BY phone_number;
 	SELECT phone_number, cnt FROM (SELECT phone_number, COUNT(*) AS cnt FROM phones GROUP BY phone_number) t2 WHERE t2.CNT > 1;
-
+```
+```
 	$ time hive -f  hql/query_execute_tez.hql
 	...
 	OK
@@ -186,6 +196,7 @@ Subtasks:
 	user	0m15.079s
 	sys	0m0.423s
 ```
+
 	For complex query:
 ```
 	SELECT 
