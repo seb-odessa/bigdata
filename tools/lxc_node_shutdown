@@ -1,0 +1,4 @@
+#!/bin/sh
+
+ssh home lxc-ls -f
+ssh hduser@$1 sudo shutdown -h now &

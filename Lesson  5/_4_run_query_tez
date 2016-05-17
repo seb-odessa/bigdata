@@ -1,0 +1,4 @@
+#!/bin/bash
+
+time cat hql/query_execute_tez.hql | ssh hduser@vm0 "bash -ic hive"
+

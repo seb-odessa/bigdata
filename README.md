@@ -18,7 +18,7 @@ Usage:
 ##Lesson 3. MapReduce
 Hadoop environment:
 ```
-	$ cat jps_report 
+	$ cat jps_report
 	#!/bin/sh
 
 	SLAVES=$HADOOP_CONF_DIR/slaves
@@ -77,8 +77,8 @@ Hadoop environment:
 - [Hadoop cluster in LXC](https://ofirm.wordpress.com/2014/01/05/creating-a-virtualized-fully-distributed-hadoop-cluster-using-linux-containers/)
 - [Building Voldemort read-only stores with Hadoop](http://blog.intelligencecomputing.io/cloud/487/repostbuilding-voldemort-read-only-stores-with-hadoop)
 
-	
-	
+
+
 ##Lesson 5. Apache Hive
 Subtasks:
 - Create several tables on HIVE
@@ -88,23 +88,101 @@ Subtasks:
 - Visualize execution plan with TEZ
 - Compare execution plans. Write conclusions
 
-	$ wget -c http://mirror.nl.webzilla.com/apache/hive/hive-1.2.1/apache-hive-1.2.1-bin.tar.gz
-	$ tar -xzf apache-hive-1.2.1-bin.tar.gz
-	$ ln -s apache-hive-1.2.1-bin hive
-	$ export HIVE_HOME=/home/hive/hive
-	
-	$ hdfs dfs -cp /user/seb/dataset/facebook-network.text /user/hive
-	$ $HIVE_HOME/bin/hive
-	hive> create table facebook_network (id int, friend int);
+	Apache Hive Installation:
+	https://cwiki.apache.org/confluence/display/Hive/GettingStarted#GettingStarted-InstallingHivefromaStableRelease
+	Apache Tez installation:
+	https://github.com/apache/incubator-tez/blob/branch-0.2.0/INSTALL.txt
+
+	$ cat hql/create_tables.hql
+	DROP TABLE IF EXISTS users  PURGE;
+	DROP TABLE IF EXISTS phones PURGE;
+	DROP TABLE IF EXISTS rooms  PURGE;
+	CREATE TABLE users  (id int, name string);
+	CREATE TABLE phones (id int, user_id int, phone_number int);
+	CREATE TABLE rooms  (id int, phone_id int, room_number int);
+	SHOW TABLES;
+	LOAD DATA INPATH '/tmp/users'  OVERWRITE INTO TABLE users;
+	LOAD DATA INPATH '/tmp/phones' OVERWRITE INTO TABLE phones;
+	LOAD DATA INPATH '/tmp/rooms'  OVERWRITE INTO TABLE rooms;
+	SELECT * FROM users;
+	SELECT * FROM phones;
+	SELECT * FROM rooms;
+
+	$ hdfs dfs -put dataset/* /tmp
+	$ hive -f hql/create_tables.hql
+	...
 	OK
-	Time taken: 0.313 seconds
-	hive> show tables;
+	1	Foo
+	2	Bar
+	3	Baz
+	4	Qux
+	Time taken: 0.189 seconds, Fetched: 4 row(s)
 	OK
-	facebook_network
-	Time taken: 0.022 seconds, Fetched: 1 row(s)
-	hive> LOAD DATA INPATH '/user/hive/facebook-network.text' INTO TABLE facebook_network;
-	Loading data to table default.facebook_network
-	Table default.facebook_network stats: [numFiles=1, totalSize=851968]
+	1	2	200
+	2	4	200
+	3	3	202
+	4	1	200
+	Time taken: 0.074 seconds, Fetched: 4 row(s)
 	OK
-	Time taken: 1.054 seconds
+	1	4	30
+	2	1	32
+	3	3	35
+	4	2	50
+	Time taken: 0.065 seconds, Fetched: 4 row(s)
+
+	$ cat hql/query_execute_mr.hql
+	SET hive.execution.engine=mr;
+	SELECT * FROM users ORDER BY name;
+	SELECT COUNT(*), phone_number FROM phones GROUP BY phone_number;
+	SELECT phone_number, cnt FROM (SELECT phone_number, COUNT(*) AS cnt FROM phones GROUP BY phone_number) t2 WHERE t2.CNT > 1;
+
+	$ time  hive -f hql/query_execute_mr.hql
+	...
+	OK
+	2	Bar
+	3	Baz
+	1	Foo
+	4	Qux
+	Time taken: 17.159 seconds, Fetched: 4 row(s)
+	...
+	OK
+	3	200
+	1	202
+	Time taken: 15.525 seconds, Fetched: 2 row(s)
+	...
+	OK
+	200	3
+	Time taken: 15.285 seconds, Fetched: 1 row(s)
+
+	real	0m54.977s
+	user	0m17.405s
+	sys	0m0.568s
+
+	$ cat hql/query_execute_tez.hql
+	SET hive.execution.engine=tez;
+	SELECT * FROM users ORDER BY name;
+	SELECT COUNT(*), phone_number FROM phones GROUP BY phone_number;
+	SELECT phone_number, cnt FROM (SELECT phone_number, COUNT(*) AS cnt FROM phones GROUP BY phone_number) t2 WHERE t2.CNT > 1;
+
+	$ time hive -f  hql/query_execute_tez.hql
+	...
+	OK
+	2	Bar
+	3	Baz
+	1	Foo
+	4	Qux
+	Time taken: 10.186 seconds, Fetched: 4 row(s)
+	...
+	OK
+	3	200
+	1	202
+	Time taken: 1.176 seconds, Fetched: 2 row(s)
+	...
+	OK
+	200	3
+	Time taken: 0.975 seconds, Fetched: 1 row(s)
+
+	real	0m18.718s
+	user	0m15.079s
+	sys	0m0.423s
 
