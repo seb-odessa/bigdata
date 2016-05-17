@@ -1,0 +1,9 @@
+#!/bin/bash
+
+echo "Execution plan with Map/Reduce"
+cat hql/mr.hql hql/1_order_by.hql | ssh hduser@vm0 "bash -ic hive" > plan_with_mr
+echo "Execution plan with Apache Tez"
+cat hql/tez.hql hql/1_order_by.hql | ssh hduser@vm0 "bash -ic hive" > plan_with_tez
+
+diff plan_with_mr plan_with_tez
+

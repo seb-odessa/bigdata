@@ -1,0 +1,8 @@
+#!/bin/bash
+
+echo "Execution plan with Map/Reduce"
+time cat hql/mr.hql hql/5_complex_query.hql | ssh hduser@vm0 "bash -ic hive -hivevar hive.execution.engine=mr"
+echo "Execution plan with Apache Tez"
+time cat hql/mr.hql hql/5_complex_query.hql | ssh hduser@vm0 "bash -ic hive -hivevar hive.execution.engine=tez"
+
+

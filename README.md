@@ -95,7 +95,7 @@ Apache Tez installation:
 
 https://github.com/apache/incubator-tez/blob/branch-0.2.0/INSTALL.txt
 
-### Several tables int Hive
+#### Several tables in Hive
 ```
 	$ cat hql/create_tables.hql
 ```
@@ -138,7 +138,7 @@ https://github.com/apache/incubator-tez/blob/branch-0.2.0/INSTALL.txt
 	4	2	50
 	Time taken: 0.065 seconds, Fetched: 4 row(s)
 ```
-### Query with GROUP BYs, ORDER BYs, JOINs, Subqueries
+#### Query with GROUP BYs, ORDER BYs, JOINs, Subqueries
 ```
 	SELECT 
 	    users.id, 
@@ -154,99 +154,7 @@ https://github.com/apache/incubator-tez/blob/branch-0.2.0/INSTALL.txt
 	ORDER BY 
 	    users.name;
 ```
-#### Execution plan with Map/Reduce:
-```
-EXPLAIN SELECT * FROM users ORDER BY name;
-STAGE DEPENDENCIES:
-  Stage-1 is a root stage
-  Stage-0 depends on stages: Stage-1
-
-STAGE PLANS:
-OK
-  Stage: Stage-1
-    Map Reduce
-      Map Operator Tree:
-          TableScan
-            alias: users
-            Statistics: Num rows: 1 Data size: 24 Basic stats: COMPLETE Column stats: NONE
-            Select Operator
-              expressions: id (type: int), name (type: string)
-              outputColumnNames: _col0, _col1
-              Statistics: Num rows: 1 Data size: 24 Basic stats: COMPLETE Column stats: NONE
-              Reduce Output Operator
-                key expressions: _col1 (type: string)
-                sort order: +
-                Statistics: Num rows: 1 Data size: 24 Basic stats: COMPLETE Column stats: NONE
-                value expressions: _col0 (type: int)
-      Reduce Operator Tree:
-        Select Operator
-          expressions: VALUE._col0 (type: int), KEY.reducesinkkey0 (type: string)
-          outputColumnNames: _col0, _col1
-          Statistics: Num rows: 1 Data size: 24 Basic stats: COMPLETE Column stats: NONE
-          File Output Operator
-            compressed: false
-            Statistics: Num rows: 1 Data size: 24 Basic stats: COMPLETE Column stats: NONE
-            table:
-                input format: org.apache.hadoop.mapred.TextInputFormat
-                output format: org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat
-                serde: org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe
-
-  Stage: Stage-0
-    Fetch Operator
-      limit: -1
-      Processor Tree:
-        ListSink
-
-hive> Time taken: 1.043 seconds, Fetched: 39 row(s)
-```
-#### Execution plan with Tez:
-```
-hive> EXPLAIN SELECT * FROM users ORDER BY name;
-OK
-STAGE DEPENDENCIES:
-  Stage-1 is a root stage
-  Stage-0 depends on stages: Stage-1
-
-STAGE PLANS:
-  Stage: Stage-1
-    Map Reduce
-      Map Operator Tree:
-          TableScan
-            alias: users
-            Statistics: Num rows: 1 Data size: 24 Basic stats: COMPLETE Column stats: NONE
-            Select Operator
-              expressions: id (type: int), name (type: string)
-              outputColumnNames: _col0, _col1
-              Statistics: Num rows: 1 Data size: 24 Basic stats: COMPLETE Column stats: NONE
-              Reduce Output Operator
-                key expressions: _col1 (type: string)
-                sort order: +
-                Statistics: Num rows: 1 Data size: 24 Basic stats: COMPLETE Column stats: NONE
-                value expressions: _col0 (type: int)
-      Reduce Operator Tree:
-        Select Operator
-          expressions: VALUE._col0 (type: int), KEY.reducesinkkey0 (type: string)
-          outputColumnNames: _col0, _col1
-          Statistics: Num rows: 1 Data size: 24 Basic stats: COMPLETE Column stats: NONE
-          File Output Operator
-            compressed: false
-            Statistics: Num rows: 1 Data size: 24 Basic stats: COMPLETE Column stats: NONE
-            table:
-                input format: org.apache.hadoop.mapred.TextInputFormat
-                output format: org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat
-                serde: org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe
-
-  Stage: Stage-0
-    Fetch Operator
-      limit: -1
-      Processor Tree:
-        ListSink
-
-hive> Time taken: 1.034 seconds, Fetched: 39 row(s)
-```
-
-
-    Apache Tez results:
+##### Query execution time with Apache Tez:
 ```
 	OK
 	2	Bar	200	32	3
@@ -255,7 +163,7 @@ hive> Time taken: 1.034 seconds, Fetched: 39 row(s)
 	4	Qux	200	50	3
 	Time taken: 13.742 seconds, Fetched: 4 row(s)
 ```
-    Default Hadoop Mar/Reduce results:
+##### Query execution time with Map/Reduce:
 ```
 	OK
 	2	Bar	200	32	3
@@ -263,5 +171,4 @@ hive> Time taken: 1.034 seconds, Fetched: 39 row(s)
 	1	Foo	200	30	3
 	4	Qux	200	50	3
 	Time taken: 62.586 seconds, Fetched: 4 row(s)
-
 ```

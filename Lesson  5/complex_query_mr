@@ -1,0 +1,20 @@
+hive> SELECT 
+    >     users.id, 
+    >     users.name, 
+    >     phones.phone_number, 
+    >     rooms.room_number,
+    >     oc.cnt
+    > FROM 
+    >     users 
+    >     JOIN phones ON users.id = phones.user_id 
+    >     JOIN rooms ON phones.id = rooms.phone_id
+    >     JOIN (SELECT phone_number, COUNT(*) AS cnt FROM phones GROUP BY phone_ number) oc ON oc.phone_number = phones.phone_number
+    > ORDER BY 
+    >     users.name;
+2	Bar	200	32	3
+3	Baz	202	35	1
+1	Foo	200	30	3
+4	Qux	200	50	3
+hive> 
+    > 
+    > 

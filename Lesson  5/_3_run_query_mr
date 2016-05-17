@@ -1,7 +1,0 @@
-#!/bin/bash
-
-echo "Execution plan with Map/Reduce"
-cat hql/1_order_by.hql | ssh hduser@vm0 "bash -ic hive -hivevar hive.execution.engine=mr"
-echo "Execution plan with Apache Tez"
-cat hql/1_order_by.hql | ssh hduser@vm0 "bash -ic hive -hivevar hive.execution.engine=tez"
-
