@@ -72,12 +72,29 @@ Payments processing:
 ```
 ##Lesson 4. KeyValue storage (Voldemort)
 Hadoop environment:
-
-## Links and tips
 - [Hadoop cluster in LXC](https://ofirm.wordpress.com/2014/01/05/creating-a-virtualized-fully-distributed-hadoop-cluster-using-linux-containers/)
 - [Building Voldemort read-only stores with Hadoop](http://blog.intelligencecomputing.io/cloud/487/repostbuilding-voldemort-read-only-stores-with-hadoop)
+- [Fix securite (kerberos) issue](https://github.com/voldemort/voldemort/issues/278)
 
-
+```
+hduser@vm0:~/workspace$ ssh vm1 "mkdir ~/workspace"
+hduser@vm0:~/workspace$ rsync -r ~/workspace/voldemort vm1:~/workspace/
+hduser@vm0:~/workspace$ rsync -r ~/workspace/facebook_friends vm1:~/workspace/
+hduser@vm0:~/workspace$ ssh vm0 "nohup ~/workspace/voldemort/bin/voldemort-server.sh ~/workspace/facebook_friends/0 > ~/workspace/log &"
+hduser@vm0:~/workspace$ ssh vm1 "nohup ~/workspace/voldemort/bin/voldemort-server.sh ~/workspace/facebook_friends/1 > ~/workspace/log &"
+hduser@vm0:~/workspace$ ./voldemort/bin/run-bnp.sh read-only-bnp.cfg
+    ...
+BnP run script finished!
+hduser@vm0:~/workspace$ ./voldemort/bin/voldemort-shell.sh facebook_friends tcp://vm0:6666/
+    ...
+Established connection to facebook_friends via [tcp://vm0:6666/]
+> get "1"
+version() ts:1463936934020: 48 73 88 92 119 126 133 194 54 236 280 53 299 315 322 346
+> get "2"
+version() ts:1463936936238: 20 115 116 149 226 312 326 333 343
+> get "7"
+version() ts:1463936938115: 291 22 31 38 65 87 103 129 136 168 213 246 304 308 315 322 339 340 347
+```
 
 ##Lesson 5. Apache Hive
 - Create several tables on HIVE

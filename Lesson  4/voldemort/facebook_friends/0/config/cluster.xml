@@ -1,0 +1,20 @@
+<cluster>
+        <name>facebook_friends</name>
+        <server>
+                <id>0</id>
+                <host>vm0</host>
+                <http-port>6665</http-port>
+                <socket-port>6666</socket-port>
+                <admin-port>6667</admin-port>
+                <partitions>0, 1</partitions>
+        </server>
+        <server>
+                <id>1</id>
+                <host>vm1</host>
+                <http-port>6665</http-port>
+                <socket-port>6666</socket-port>
+                <admin-port>6667</admin-port>
+                <partitions>2, 3</partitions>
+        </server>
+</cluster>
+

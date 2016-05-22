@@ -1,0 +1,172 @@
+hduser@vm0:~/workspace$ ./voldemort/bin/run-bnp.sh read-only-bnp.cfg 
+Voldemort version detected: 1.10.15
+Executing BnP with:
+config_file : read-only-bnp.cfg
+hadoop_config_path : /etc/hadoop/conf/
+16/05/22 16:59:10 INFO azkaban.VoldemortBuildAndPushJobRunner: Extracting config properties out of: read-only-bnp.cfg
+16/05/22 16:59:10 INFO shell-job: Job props:
+{
+    avro.key.field: key
+    avro.value.field: value
+    azkaban.should.proxy: true
+    build.input.path: /user/seb/dataset/facebook-network.avro
+    build.output.dir: /tmp/voldermort/
+    build.replication.factor: 2
+    build.type.avro: true
+    hadoop.job.ugi: hduser,hadoop
+    job.class: voldemort.store.readonly.mr.azkaban.VoldemortBuildAndPushJob
+    push.cluster: tcp://vm0:6666
+    push.store.description: "facebook friends"
+    push.store.name: facebook_friends
+    push.store.owners: hduser
+    type: java
+    user.to.proxy: hduser
+}
+16/05/22 16:59:10 INFO client.AbstractStoreClientFactory: Client zone-id [-1] Attempting to get raw store [voldsys$_metadata_version_persistence] 
+16/05/22 16:59:10 INFO client.AbstractStoreClientFactory: Client zone-id [-1] Attempting to get raw store [voldsys$_store_quotas] 
+16/05/22 16:59:10 INFO shell-job: voldemort.fetcher.protocol is set to : webhdfs
+16/05/22 16:59:10 INFO shell-job: voldemort.fetcher.port is set to : 50070
+16/05/22 16:59:10 INFO shell-job: Build and Push Job constructed for 1 cluster(s).
+16/05/22 16:59:10 INFO shell-job: Requesting block-level compression codec expected by Server
+16/05/22 16:59:10 INFO shell-job: Server responded with block-level compression codecs: [ NO_CODEC ]
+16/05/22 16:59:10 INFO shell-job: Using no block-level compression
+16/05/22 16:59:12 INFO shell-job: Verifying store against cluster URL: tcp://vm0:6666
+<store>
+    <name>facebook_friends</name>
+    <persistence>read-only</persistence>
+    <description>"facebook friends"</description>
+    <owners>hduser</owners>
+    <routing>client</routing>
+    <replication-factor>2</replication-factor>
+    <required-reads>1</required-reads>
+    <required-writes>1</required-writes>
+    <key-serializer>
+	<type>avro-generic</type>
+	<schema-info version="0">"int"</schema-info>
+    </key-serializer>
+    <value-serializer>
+	<type>avro-generic</type>
+	<schema-info version="0">"string"</schema-info>
+    </value-serializer>
+</store>
+16/05/22 16:59:12 INFO utils.StoreDefinitionUtils: Validating schema for store: facebook_friends
+16/05/22 16:59:12 INFO mr.HadoopStoreBuilder: HadoopStoreBuilder constructed with numChunksOverride <= 0, thus relying chunk size.
+16/05/22 16:59:12 INFO utils.HadoopUtils: findContainingJar finds url:file:/tmp/hadoop-unjar1245124536418980471/voldemort/store/readonly/mr/HadoopStoreBuilder.class
+16/05/22 16:59:12 INFO utils.HadoopUtils: findContainingJar finds url:jar:file:/home/hduser/workspace/voldemort/build/libs/voldemort-1.10.15-bnp.jar!/voldemort/store/readonly/mr/HadoopStoreBuilder.class
+16/05/22 16:59:12 INFO azkaban.AbstractHadoopJob: Setting hadoop jar file for class:class voldemort.store.readonly.mr.HadoopStoreBuilder  to /home/hduser/workspace/voldemort/build/libs/voldemort-1.10.15-bnp.jar
+16/05/22 16:59:12 INFO azkaban.AbstractHadoopJob: *************************************************************************
+16/05/22 16:59:12 INFO Configuration.deprecation: mapred.job.tracker is deprecated. Instead, use mapreduce.jobtracker.address
+16/05/22 16:59:12 INFO azkaban.AbstractHadoopJob:           Running on Real Hadoop Cluster(local)           
+16/05/22 16:59:12 INFO azkaban.AbstractHadoopJob: *************************************************************************
+16/05/22 16:59:12 INFO Configuration.deprecation: dfs.umaskmode is deprecated. Instead, use fs.permissions.umask-mode
+16/05/22 16:59:12 INFO mr.HadoopStoreBuilder: Data size = 439463, replication factor = 2, numNodes = 2, numPartitions = 4, chunk size = 1073741824
+16/05/22 16:59:12 INFO mr.HadoopStoreBuilder: Number of chunks: 1, number of reducers: 4, save keys: true, reducerPerBucket: true, buildPrimaryReplicasOnly: true
+16/05/22 16:59:12 INFO mr.HadoopStoreBuilder: Building store...
+16/05/22 16:59:12 INFO client.RMProxy: Connecting to ResourceManager at vm0/10.0.3.30:8032
+16/05/22 16:59:12 INFO client.RMProxy: Connecting to ResourceManager at vm0/10.0.3.30:8032
+16/05/22 16:59:12 WARN mapreduce.JobResourceUploader: Hadoop command-line option parsing not performed. Implement the Tool interface and execute your application with ToolRunner to remedy this.
+16/05/22 16:59:12 INFO mapred.FileInputFormat: Total input paths to process : 1
+16/05/22 16:59:12 INFO mapreduce.JobSubmitter: number of splits:2
+16/05/22 16:59:12 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_1463922751562_0009
+16/05/22 16:59:13 INFO impl.YarnClientImpl: Submitted application application_1463922751562_0009
+16/05/22 16:59:13 INFO mapreduce.Job: The url to track the job: http://vm0:8088/proxy/application_1463922751562_0009/
+16/05/22 16:59:13 INFO mapreduce.Job: Running job: job_1463922751562_0009
+16/05/22 16:59:18 INFO mapreduce.Job: Job job_1463922751562_0009 running in uber mode : false
+16/05/22 16:59:18 INFO mapreduce.Job:  map 0% reduce 0%
+16/05/22 16:59:24 INFO mapreduce.Job:  map 100% reduce 0%
+16/05/22 16:59:30 INFO mapreduce.Job:  map 100% reduce 25%
+16/05/22 16:59:32 INFO mapreduce.Job:  map 100% reduce 50%
+16/05/22 16:59:33 INFO mapreduce.Job:  map 100% reduce 100%
+16/05/22 16:59:34 INFO mapreduce.Job: Job job_1463922751562_0009 completed successfully
+16/05/22 16:59:34 INFO mapreduce.Job: Counters: 49
+    File System Counters
+	FILE: Number of bytes read=546841
+	FILE: Number of bytes written=1835308
+	FILE: Number of read operations=0
+	FILE: Number of large read operations=0
+	FILE: Number of write operations=0
+	HDFS: Number of bytes read=544767
+	HDFS: Number of bytes written=519468
+	HDFS: Number of read operations=36
+	HDFS: Number of large read operations=0
+	HDFS: Number of write operations=56
+    Job Counters 
+	Launched map tasks=2
+	Launched reduce tasks=4
+	Data-local map tasks=2
+	Total time spent by all maps in occupied slots (ms)=6460
+	Total time spent by all reduces in occupied slots (ms)=15825
+	Total time spent by all map tasks (ms)=6460
+	Total time spent by all reduce tasks (ms)=15825
+	Total vcore-milliseconds taken by all map tasks=6460
+	Total vcore-milliseconds taken by all reduce tasks=15825
+	Total megabyte-milliseconds taken by all map tasks=6615040
+	Total megabyte-milliseconds taken by all reduce tasks=16204800
+    Map-Reduce Framework
+	Map input records=3602
+	Map output records=3602
+	Map output bytes=537939
+	Map output materialized bytes=546865
+	Input split bytes=212
+	Combine input records=0
+	Combine output records=0
+	Reduce input groups=3602
+	Reduce shuffle bytes=546865
+	Reduce input records=3602
+	Reduce output records=0
+	Spilled Records=7204
+	Shuffled Maps =8
+	Failed Shuffles=0
+	Merged Map outputs=8
+	GC time elapsed (ms)=259
+	CPU time spent (ms)=12570
+	Physical memory (bytes) snapshot=1296261120
+	Virtual memory (bytes) snapshot=4335730688
+	Total committed heap usage (bytes)=1207959552
+    Shuffle Errors
+	BAD_ID=0
+	CONNECTION=0
+	IO_ERROR=0
+	WRONG_LENGTH=0
+	WRONG_MAP=0
+	WRONG_REDUCE=0
+    File Input Format Counters 
+	Bytes Read=544555
+    File Output Format Counters 
+	Bytes Written=940
+16/05/22 16:59:34 INFO mr.HadoopStoreBuilder: Number of collisions in the job - 0
+16/05/22 16:59:34 INFO mr.HadoopStoreBuilder: Maximum number of collisions for one entry - 0
+16/05/22 16:59:34 INFO mr.HadoopStoreBuilder: partition-0: Checksum = 31460a5b476515a800870962719145e4, Size = 120 KB
+16/05/22 16:59:34 INFO mr.HadoopStoreBuilder: partition-1: Checksum = 57fb61ffcfa928fd930c62d450aae482, Size = 131 KB
+16/05/22 16:59:34 INFO mr.HadoopStoreBuilder: partition-2: Checksum = bdd8ad0ca7d481084efcdb45f34ba50c, Size = 124 KB
+16/05/22 16:59:34 INFO mr.HadoopStoreBuilder: partition-3: Checksum = fc948604ed0abcb71f9508a6447160e9, Size = 129 KB
+16/05/22 16:59:34 INFO mr.HadoopStoreBuilder: Setting permission to 755 for /tmp/voldermort/vm0/full-store.metadata
+16/05/22 16:59:34 INFO shell-job: Pushing to cluster URL: tcp://vm0:6666
+16/05/22 16:59:34 INFO shell-job: StorePushTask.call() invoked for cluster URL: tcp://vm0:6666
+16/05/22 16:59:34 WARN shell-job: pushHighAvailability is DISABLED on cluster: tcp://vm0:6666
+16/05/22 16:59:34 INFO shell-job: Push starting for cluster: tcp://vm0:6666
+16/05/22 16:59:34 INFO utils.VoldemortUtils: Existing protocol = hdfs and port = 9000
+16/05/22 16:59:34 INFO utils.VoldemortUtils: New protocol = webhdfs and port = 50070
+16/05/22 16:59:34 INFO client.AbstractStoreClientFactory: Client zone-id [-1] Attempting to get raw store [voldsys$_metadata_version_persistence] 
+16/05/22 16:59:34 INFO client.AbstractStoreClientFactory: Client zone-id [-1] Attempting to get raw store [voldsys$_store_quotas] 
+16/05/22 16:59:34 INFO swapper.AdminStoreSwapper|tcp://vm0:6666: tcp://vm0:6666 : Initiating swap of facebook_friends with dataDir: /tmp/voldermort/vm0
+16/05/22 16:59:34 INFO swapper.AdminStoreSwapper|tcp://vm0:6666: tcp://vm0:6666 : Invoking fetch for Node vm1:6666 [id 1] for webhdfs://vm0:50070/tmp/voldermort/vm0
+16/05/22 16:59:34 INFO swapper.AdminStoreSwapper|tcp://vm0:6666: tcp://vm0:6666 : Invoking fetch for Node vm0:6666 [id 0] for webhdfs://vm0:50070/tmp/voldermort/vm0
+16/05/22 16:59:34 INFO admin.AdminClient: Node vm0:6666 [id 0] : AsyncOperationStatus(task id = 0, description = Fetch store 'facebook_friends' v1, complete = false, status = 0 MB copied at 0 MB/sec - 0 % complete)
+16/05/22 16:59:34 INFO admin.AdminClient: Node vm1:6666 [id 1] : AsyncOperationStatus(task id = 0, description = Fetch store 'facebook_friends' v1, complete = false, status = 0 MB copied at 0 MB/sec - 0 % complete)
+16/05/22 16:59:36 INFO admin.AdminClient: Node vm1:6666 [id 1] : AsyncOperationStatus(task id = 0, description = Fetch store 'facebook_friends' v1, complete = true, status = /home/hduser/workspace/facebook_friends/1/data/read-only/facebook_friends/version-1)
+16/05/22 16:59:36 INFO swapper.AdminStoreSwapper|tcp://vm0:6666: tcp://vm0:6666 : Fetch succeeded on Node vm1:6666 [id 1]
+16/05/22 16:59:36 INFO admin.AdminClient: Node vm0:6666 [id 0] : AsyncOperationStatus(task id = 0, description = Fetch store 'facebook_friends' v1, complete = true, status = /home/hduser/workspace/facebook_friends/0/data/read-only/facebook_friends/version-1)
+16/05/22 16:59:36 INFO swapper.AdminStoreSwapper|tcp://vm0:6666: tcp://vm0:6666 : Fetch succeeded on Node vm0:6666 [id 0]
+16/05/22 16:59:36 INFO swapper.AdminStoreSwapper|tcp://vm0:6666: tcp://vm0:6666 : Attempting swap for Node vm0:6666 [id 0], dir = /home/hduser/workspace/facebook_friends/0/data/read-only/facebook_friends/version-1
+16/05/22 16:59:36 INFO swapper.AdminStoreSwapper|tcp://vm0:6666: tcp://vm0:6666 : Swap succeeded for Node vm0:6666 [id 0]
+16/05/22 16:59:36 INFO swapper.AdminStoreSwapper|tcp://vm0:6666: tcp://vm0:6666 : Attempting swap for Node vm1:6666 [id 1], dir = /home/hduser/workspace/facebook_friends/1/data/read-only/facebook_friends/version-1
+16/05/22 16:59:36 INFO swapper.AdminStoreSwapper|tcp://vm0:6666: tcp://vm0:6666 : Swap succeeded for Node vm1:6666 [id 1]
+16/05/22 16:59:36 INFO swapper.AdminStoreSwapper|tcp://vm0:6666: tcp://vm0:6666 : Swap complete.
+16/05/22 16:59:36 INFO shell-job: StorePushTask.call() finished for cluster URL: tcp://vm0:6666
+16/05/22 16:59:36 INFO shell-job: Successfully pushed to cluster URL: tcp://vm0:6666
+16/05/22 16:59:36 INFO shell-job: Cleaning up: Deleting BnP output and temp files from HDFS: /tmp/voldermort/vm0
+16/05/22 16:59:36 INFO shell-job: Deleted /tmp/voldermort/vm0
+16/05/22 16:59:36 INFO shell-job: Closing AdminClient with BootStrapUrls: [tcp://vm0:6666]
+16/05/22 16:59:36 INFO azkaban.VoldemortBuildAndPushJobRunner: BnP job finished successfully (:
+BnP run script finished!

@@ -39,7 +39,7 @@ public class avro extends Configured implements Tool {
         job.setReducerClass(AvroReducer.class);
         job.setOutputFormatClass(AvroKeyValueOutputFormat.class);
         AvroJob.setOutputKeySchema(job, Schema.create(Schema.Type.INT));
-        AvroJob.setOutputValueSchema(job, Schema.create(Schema.Type.INT));
+        AvroJob.setOutputValueSchema(job, Schema.create(Schema.Type.STRING));
         return job.waitForCompletion(true) ? 0 : 1;
     }
 }
