@@ -70,6 +70,18 @@ Payments processing:
 	{ "id":12, "total":185.66, "stores":["www.store2.com", "www.store4.com"] }
 	{ "id":1123, "total":16.50, "stores":["www.store1.com"] }
 ```
+
++In general very nice
++
++1. Why you have not used Gradle or MVN?
++
++2. https://git.lohika.com/pkolevatyh/bigdata/blob/master/Lesson%20%203/src/JsonOutput.java#L25
++
++I think it has a problem if number of partitions more than 1.
++I think you have to use getDefaultWorkFile
++Could you recheck it? 
+
+
 ##Lesson 4. KeyValue storage (Voldemort)
 Hadoop environment:
 - [Hadoop cluster in LXC](https://ofirm.wordpress.com/2014/01/05/creating-a-virtualized-fully-distributed-hadoop-cluster-using-linux-containers/)
