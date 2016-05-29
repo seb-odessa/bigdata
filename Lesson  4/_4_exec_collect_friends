@@ -1,8 +1,0 @@
-#!/bin/sh
-
-. ./_setup_environment
-
-ant jar
-$RUN hdfs dfs -test -d $RESULTS && $RUN hdfs dfs -rm -r $RESULTS
-$RUN yarn jar jar/facebook.jar friends $TEXT_TARGET $RESULTS
-$RUN hdfs dfs -cat $RESULTS/*

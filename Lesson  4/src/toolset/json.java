@@ -33,6 +33,8 @@ public class json extends Configured implements Tool {
         job.setReducerClass(JsonReducer.class);
         job.setOutputKeyClass(NullWritable.class);
         job.setOutputValueClass(Text.class);
+        job.setNumReduceTasks(1);
+
         return job.waitForCompletion(true) ? 0 : 1;
     }
 }

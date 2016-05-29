@@ -1,9 +1,0 @@
-{
-    "namespace": "schema",
-    "type" : "record",
-    "name" : "network",
-    "fields" : [
-        { "name" : "id", "type" : "int" },
-        { "name" : "friend", "type": "int" }
-    ]
-}

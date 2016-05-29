@@ -1,0 +1,28 @@
+#!/bin/sh
+
+RUN=../tools/exec
+HDFS_ROOT=/user/$(whoami)
+DATASET=$HDFS_ROOT/dataset
+INPUT=facebook_combined.txt
+OUTPUT=facebook-network.avro
+RESULTS=$HDFS_ROOT/tmp
+
+WD="$(pwd)"
+cd ../
+JARS=$(pwd)/jars
+cd "$WD"
+
+
+$RUN hdfs dfs -test -d $HDFS_ROOT || $RUN hdfs dfs -mkdir $HDFS_ROOT || exit
+$RUN hdfs dfs -test -d $DATASET || $RUN hdfs dfs -mkdir $DATASET || exit
+$RUN hdfs dfs -test -d $RESULTS && $RUN hdfs dfs -rm -r $RESULTS
+$RUN hdfs dfs -test -f $DATASET/$INPUT || $RUN hdfs dfs -put dataset/$INPUT $DATASET || exit
+$RUN hdfs dfs -test -f $DATASET/$OUTPUT && $RUN hdfs dfs -rm dataset/$OUTPUT  || exit
+
+export LIBJARS=$JARS/avro-1.7.4.jar,$JARS/avro-mapred-1.7.4-hadoop2.jar
+export HADOOP_CLASSPATH=$(echo ${LIBJARS} | sed s/,/:/g)
+ant jar
+$RUN yarn jar jar/facebook.jar avro $DATASET/$INPUT $RESULTS -libjars $LIBJARS
+$RUN hdfs dfs -mv $RESULTS/part-r-00000.avro $DATASET/$OUTPUT
+$RUN hdfs dfs -rm -r $RESULTS/
+

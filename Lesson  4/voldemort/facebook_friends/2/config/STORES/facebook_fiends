@@ -1,0 +1,19 @@
+<store>
+    <name>facebook_friends</name>
+    <persistence>read-only</persistence>
+    <routing-strategy>consistent-routing</routing-strategy>
+    <routing>client</routing>
+    <replication-factor>2</replication-factor>
+    <required-reads>1</required-reads>
+    <required-writes>1</required-writes>
+
+    <key-serializer>
+	<type>avro-generic</type>
+	<schema-info>"int"</schema-info>
+    </key-serializer>
+
+    <value-serializer>
+	<type>avro-generic</type>
+	<schema-info>"string"</schema-info>
+    </value-serializer>
+</store>

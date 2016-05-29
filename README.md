@@ -71,32 +71,69 @@ Payments processing:
 	{ "id":1123, "total":16.50, "stores":["www.store1.com"] }
 ```
 
-+In general very nice
-+
-+1. Why you have not used Gradle or MVN?
-+
-+2. https://git.lohika.com/pkolevatyh/bigdata/blob/master/Lesson%20%203/src/JsonOutput.java#L25
-+
-+I think it has a problem if number of partitions more than 1.
-+I think you have to use getDefaultWorkFile
-+Could you recheck it? 
-
-
 ##Lesson 4. KeyValue storage (Voldemort)
 Hadoop environment:
 - [Hadoop cluster in LXC](https://ofirm.wordpress.com/2014/01/05/creating-a-virtualized-fully-distributed-hadoop-cluster-using-linux-containers/)
 - [Building Voldemort read-only stores with Hadoop](http://blog.intelligencecomputing.io/cloud/487/repostbuilding-voldemort-read-only-stores-with-hadoop)
 - [Fix securite (kerberos) issue](https://github.com/voldemort/voldemort/issues/278)
 
+Script for preparation the dataset for Voldemort (collect facebook friends to avro file):
 ```
-hduser@vm0:~/workspace$ ssh vm1 "mkdir ~/workspace"
-hduser@vm0:~/workspace$ rsync -r ~/workspace/voldemort vm1:~/workspace/
-hduser@vm0:~/workspace$ rsync -r ~/workspace/facebook_friends vm1:~/workspace/
-hduser@vm0:~/workspace$ ssh vm0 "nohup ~/workspace/voldemort/bin/voldemort-server.sh ~/workspace/facebook_friends/0 > ~/workspace/log &"
-hduser@vm0:~/workspace$ ssh vm1 "nohup ~/workspace/voldemort/bin/voldemort-server.sh ~/workspace/facebook_friends/1 > ~/workspace/log &"
+#!/bin/sh
+
+RUN=../tools/exec
+HDFS_ROOT=/user/$(whoami)
+DATASET=$HDFS_ROOT/dataset
+INPUT=facebook_combined.txt
+OUTPUT=facebook-network.avro
+RESULTS=$HDFS_ROOT/tmp
+
+WD="$(pwd)"
+cd ../
+JARS=$(pwd)/jars
+cd "$WD"
+
+
+$RUN hdfs dfs -test -d $HDFS_ROOT || $RUN hdfs dfs -mkdir $HDFS_ROOT || exit
+$RUN hdfs dfs -test -d $DATASET || $RUN hdfs dfs -mkdir $DATASET || exit
+$RUN hdfs dfs -test -d $RESULTS && $RUN hdfs dfs -rm -r $RESULTS
+$RUN hdfs dfs -test -f $DATASET/$INPUT || $RUN hdfs dfs -put dataset/$INPUT $DATASET || exit
+$RUN hdfs dfs -test -f $DATASET/$OUTPUT && $RUN hdfs dfs -rm dataset/$OUTPUT  || exit
+
+export LIBJARS=$JARS/avro-1.7.4.jar,$JARS/avro-mapred-1.7.4-hadoop2.jar
+export HADOOP_CLASSPATH=$(echo ${LIBJARS} | sed s/,/:/g)
+ant jar
+$RUN yarn jar jar/facebook.jar avro $DATASET/$INPUT $RESULTS -libjars $LIBJARS
+$RUN hdfs dfs -mv $RESULTS/part-r-00000.avro $DATASET/$OUTPUT
+$RUN hdfs dfs -rm -r $RESULTS/
+```
+
+Deploy config and run Voldemort cluster:
+```
+#!/bin/sh
+RUN=../tools/exec
+for id in 0 1 2; do
+    host=vm${id}
+    echo ${host}:
+    $RUN ssh hduser@$host "mkdir -p ~/workspace"
+    $RUN rsync -vr --delete voldemort/facebook_friends hduser@$host:~/workspace/
+    $RUN ssh hduser@$host "nohup ~/workspace/voldemort/bin/voldemort-server.sh ~/workspace/facebook_friends/${id} > ~/workspace/${id}.log &"
+done
+$RUN rsync -v voldemort/read-only-bnp.cfg hduser@$host:~/workspace/
+```
+Loading data to the Voldemort cluster:
+
+```
 hduser@vm0:~/workspace$ ./voldemort/bin/run-bnp.sh read-only-bnp.cfg
     ...
+16/05/29 11:27:33 INFO mr.HadoopStoreBuilder: Data size = 439463, replication factor = 2, numNodes = 3, numPartitions = 6, chunk size = 1073741824
+16/05/29 11:27:33 INFO mr.HadoopStoreBuilder: Number of chunks: 1, number of reducers: 6, save keys: true, reducerPerBucket: true, buildPrimaryReplicasOnly: true
+16/05/29 11:27:33 INFO mr.HadoopStoreBuilder: Building store...
+    ...
 BnP run script finished!
+```
+Check loaded data:
+```
 hduser@vm0:~/workspace$ ./voldemort/bin/voldemort-shell.sh facebook_friends tcp://vm0:6666/
     ...
 Established connection to facebook_friends via [tcp://vm0:6666/]
@@ -169,18 +206,18 @@ https://github.com/apache/incubator-tez/blob/branch-0.2.0/INSTALL.txt
 ```
 #### Query with GROUP BYs, ORDER BYs, JOINs, Subqueries
 ```
-	SELECT 
-	    users.id, 
-	    users.name, 
-	    phones.phone_number, 
+	SELECT
+	    users.id,
+	    users.name,
+	    phones.phone_number,
 	    rooms.room_number,
 	    oc.cnt
-	FROM 
-	    users 
-	    JOIN phones ON users.id = phones.user_id 
+	FROM
+	    users
+	    JOIN phones ON users.id = phones.user_id
 	    JOIN rooms ON phones.id = rooms.phone_id
 	    JOIN (SELECT phone_number, COUNT(*) AS cnt FROM phones GROUP BY phone_number) oc ON oc.phone_number = phones.phone_number
-	ORDER BY 
+	ORDER BY
 	    users.name;
 ```
 ##### Query execution time with Apache Tez:

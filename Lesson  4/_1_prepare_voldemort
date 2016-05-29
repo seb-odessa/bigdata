@@ -1,0 +1,17 @@
+#!/bin/sh
+
+RUN=../tools/exec
+
+
+for id in 0 1 2; do
+    host=vm${id}
+    echo ${host}:
+    $RUN ssh hduser@$host "mkdir -p ~/workspace"
+    $RUN rsync -vr --delete voldemort/facebook_friends hduser@$host:~/workspace/
+    $RUN ssh hduser@$host "nohup ~/workspace/voldemort/bin/voldemort-server.sh ~/workspace/facebook_friends/${id} > ~/workspace/${id}.log &"
+done
+
+$RUN rsync -v voldemort/read-only-bnp.cfg hduser@$host:~/workspace/
+$RUN ssh hduser@$host "bash ~/workspace/voldemort/bin/run-bnp.sh ~/workspaceread-only-bnp.cfg"
+
+
