@@ -6,8 +6,10 @@ import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
+
 import org.apache.hadoop.mapreduce.RecordWriter;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 import java.io.DataOutputStream;
@@ -22,7 +24,7 @@ public class JsonOutput extends TextOutputFormat<IntWritable, ReducedWritable> {
         Configuration conf = context.getConfiguration();
         Path path = getOutputPath(context);
         FileSystem fs = path.getFileSystem(conf);
-        FSDataOutputStream out = fs.create(new Path(path,context.getJobName()));
+        FSDataOutputStream out = fs.create(new Path(path, getDefaultWorkFile(context, ".json")));
         return new JsonRecordWriter(out);
     }
 

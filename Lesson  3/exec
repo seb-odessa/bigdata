@@ -5,7 +5,7 @@ DATA_DIR=$HDFS_DIR/dataset
 DATA_FILE=payments.log
 LOCAL_FILE=dataset/$DATA_FILE
 REMOTE_FILE=$DATA_DIR/$DATA_FILE
-RESULTS=report
+RESULTS=$HDFS_DIR/report
 RUN=../tools/exec
 
 $RUN hdfs dfs -test -d $HDFS_DIR || $RUN hdfs dfs -mkdir $HDFS_DIR || exit
