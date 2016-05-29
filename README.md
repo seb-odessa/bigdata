@@ -240,3 +240,13 @@ https://github.com/apache/incubator-tez/blob/branch-0.2.0/INSTALL.txt
 ```
 
 The Apache Hive is much more effective when used over Apache Tez instead of regular Map/Reduce.
+
+##Lesson 7. Column Oriented Data Store
+
+- Create Cassandra cluster at least with 2 nodes(e.g. using Docker)
+- Integrate Cassandra with Lucene index
+- Provide possibility to search by wildcards
+- Acceptance criteria:
+- Dockerfile or something that expose how to create the cluster
+- CQL: Initial schema and insert requests
+- Examples of requests with wildcards
