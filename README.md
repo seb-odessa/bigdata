@@ -238,3 +238,5 @@ https://github.com/apache/incubator-tez/blob/branch-0.2.0/INSTALL.txt
 	4	Qux	200	50	3
 	Time taken: 62.586 seconds, Fetched: 4 row(s)
 ```
+
+The Apache Hive is much more effective when used over Apache Tez instead of regular Map/Reduce.
